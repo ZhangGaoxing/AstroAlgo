@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Zhang Gaoxing</Authors>
     <Product>Astronomical Algorithms</Product>
     <Description>AstroAlgo is an astronomical algorithms library, written in .NET Standard. It can be used to calculate astronomical data, like equator and ecliptic coordinate, planet rise and down time, elevation angle... Planets data are based on the planetary theory VSOP87.
