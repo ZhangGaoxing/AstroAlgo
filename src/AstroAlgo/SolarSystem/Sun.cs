@@ -1,6 +1,5 @@
 ﻿using AstroAlgo.Basic;
 using AstroAlgo.Models;
-
 using System;
 
 namespace AstroAlgo.SolarSystem
@@ -8,154 +7,22 @@ namespace AstroAlgo.SolarSystem
     /// <summary>
     /// 太阳
     /// </summary>
-    public class Sun : IStar
+    public class Sun : Star
     {
-        private double latitude;
-        private double longitude;
-        private TimeZoneInfo localZone;
-
-        #region Property
-
-        /// <summary>
-        /// 当前视赤道坐标
-        /// </summary>
-        public Equator Equator
-        { 
-            get 
-            { 
-                return EquatorialCoordinate(DateTime.Now, true); 
-            } 
+        /// <inheritdoc/>
+        public Sun() : base()
+        {
         }
 
-        /// <summary>
-        /// 当前视黄道坐标
-        /// </summary>
-        public Ecliptic Ecliptic
+        /// <inheritdoc/>
+        public Sun(double latitude, double longitude, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTimeZone)
         {
-            get
-            {
-                return CoordinateSystem.Equatorial2Ecliptic(Equator, DateTime.Now, true);
-            }
-        }
-
-        /// <summary>
-        /// 当日日出时间
-        /// </summary>
-        public TimeSpan Rise
-        {
-            get
-            {
-                var e = EquatorialCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, latitude, longitude, DateTime.Now, localZone);
-
-                var span = TimeSpan.FromHours(time[0] / 15.0);
-
-                return new TimeSpan(span.Hours, span.Minutes, span.Seconds);
-            }
-        }
-
-        /// <summary>
-        /// 当日中天时间
-        /// </summary>
-        public TimeSpan Culmination
-        {
-            get
-            {
-                var e = EquatorialCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, latitude, longitude, DateTime.Now, localZone);
-
-                var span = TimeSpan.FromHours((time[0] + time[1]) / 30.0);
-                if (time[0] > time[1])
-                {
-                    if (span.Hours > 12)
-                    {
-                        return new TimeSpan(span.Hours - 12, span.Minutes, span.Seconds);
-                    }
-                    else
-                    {
-                        return new TimeSpan(span.Hours + 12, span.Minutes, span.Seconds);
-                    }
-                }
-                else
-                {
-                    return new TimeSpan(span.Hours, span.Minutes, span.Seconds);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 当日日落时间
-        /// </summary>
-        public TimeSpan Down
-        {
-            get
-            {
-                var e = EquatorialCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, latitude, longitude, DateTime.Now, localZone);
-
-                var span = TimeSpan.FromHours(time[1] / 15.0);
-
-                return new TimeSpan(span.Hours, span.Minutes, span.Seconds);
-            }
-        }
-
-        /// <summary>
-        /// 日地距离(AU)
-        /// </summary>
-        public double ToEarth
-        {
-            get
-            {
-                return ToEarthDistance(DateTime.Now);
-            }
-        }
-
-        /// <summary>
-        /// 当前高度角
-        /// </summary>
-        public double ElevationAngle
-        {
-            get
-            {
-                return CoordinateSystem.GetElevationAngle(DateTime.Now, Equator, latitude, longitude);
-            }
-        }
-
-        /// <summary>
-        /// 当前方位角
-        /// </summary>
-        public double Azimuth
-        {
-            get
-            {
-                return CoordinateSystem.GetAzimuth(DateTime.Now, Equator, latitude, longitude);
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// 初始化一个太阳实例
-        /// </summary>
-        /// <param name="latitude">观测地纬度</param>
-        /// <param name="longitude">观测地经度</param>
-        /// <param name="localZone">时区</param>
-        public Sun(double latitude, double longitude, TimeZoneInfo localZone)
-        {
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.localZone = localZone;
         }
 
         #region Method
 
-        /// <summary>
-        /// 计算指定时间的太阳赤经与赤纬
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <param name="isApparent">是否为视赤道坐标</param>
-        /// <returns>赤经赤纬 (0°-360°)</returns>
-        public static Equator EquatorialCoordinate(DateTime time, bool isApparent = false)
+        /// <inheritdoc/>
+        public override Equator GetEquatorialCoordinate(DateTime time, bool isApparent = false)
         {
             double T = (Julian.ToJulianDay(time) - 2451545.0) / 36525.0;
 
@@ -212,12 +79,8 @@ namespace AstroAlgo.SolarSystem
             return c;
         }
 
-        /// <summary>
-        /// 日地距离
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns>距离，单位为“天文单位”</returns>
-        public static double ToEarthDistance(DateTime time)
+        /// <inheritdoc/>
+        public override double GetToEarthDistance(DateTime time)
         {
             double T = (Julian.ToJulianDay(time) - 2451545.0) / 36525.0;
 
@@ -239,12 +102,12 @@ namespace AstroAlgo.SolarSystem
         }
 
         /// <summary>
-        /// 计算分至点
+        /// Calculate the equinox and solstice.
         /// </summary>
-        /// <param name="year">年份</param>
-        /// <param name="localZone">时区</param>
-        /// <returns>DateTime 数组，长度为4，内容为春分、夏至、秋分、冬至时间</returns>
-        public static DateTime[] EquinoxAndSolstice(int year, TimeZoneInfo localZone)
+        /// <param name="year">Year.</param>
+        /// <param name="localTimeZone">Local time zone.</param>
+        /// <returns><see cref="DateTime"/> array with length of 4 and contents of vernal equinox, summer solstice, autumnal equinox and winter solstice.</returns>
+        public DateTime[] GetEquinoxAndSolstice(int year, TimeZoneInfo localTimeZone)
         {
             double Y = (year - 2000) / 1000.0;
             // Spring
@@ -292,23 +155,26 @@ namespace AstroAlgo.SolarSystem
 
                 double JD = JDE[i] + 0.00001 * S / lambda;
 
-                result[i] = TimeZoneInfo.ConvertTime(Julian.ToCalendarDay(JD), TimeZoneInfo.Utc, localZone);
+                result[i] = TimeZoneInfo.ConvertTime(Julian.ToCalendarDay(JD), TimeZoneInfo.Utc, localTimeZone);
             }
 
             return result;
         }
 
         /// <summary>
-        /// 计算二十四节气
-        /// 若计算分至点请使用方法 EquinoxAndSolstice()
+        /// Calculate 24 solar terms.
         /// </summary>
-        /// <param name="year">年份</param>
-        /// <param name="term">节气</param>
-        /// <param name="localZone">时区</param>
-        /// <returns>节气时间</returns>
-        public static DateTime SolarTerms(int year, SolarTerm term, TimeZoneInfo localZone)
+        /// <param name="year">Year.</param>
+        /// <param name="term">Solar term.</param>
+        /// <param name="localTimeZone">Local time zone.</param>
+        /// <returns>The <see cref="DateTime"/> of solar term.</returns>
+        /// <remarks>
+        /// If you want to calculate the equinox and solstice, please use the method <see cref="GetEquinoxAndSolstice"/>.
+        /// </remarks>
+        public DateTime GetSolarTerms(int year, SolarTerm term, TimeZoneInfo localTimeZone)
         {
-            EstimateSTtimeScope(year, term, out double lJD, out double rJD); /*估算迭代起始时间区间*/
+            // Estimate iteration start time interval
+            EstimateSTtimeScope(year, term, out double lJD, out double rJD);
 
             double solarTermsJD = 0.0;
             double longitude = 0.0;
@@ -318,11 +184,9 @@ namespace AstroAlgo.SolarSystem
             {
                 solarTermsJD = ((rJD - lJD) * 0.618) + lJD;
                 solarTermsTime = Julian.ToCalendarDay(solarTermsJD);
-                longitude = CoordinateSystem.Equatorial2Ecliptic(EquatorialCoordinate(solarTermsTime, true), solarTermsTime, true).Longitude;
-                /*
-                    对黄经0度迭代逼近时，由于角度360度圆周性，估算黄经值可能在(345,360]和[0,15)两个区间，
-                    如果值落入前一个区间，需要进行修正
-                */
+                longitude = CoordinateSystem.Equator2Ecliptic(GetEquatorialCoordinate(solarTermsTime, true), solarTermsTime, true).Longitude;
+
+                // In the iterative approximation of 0 degree of ecliptic longitude, the estimated value of ecliptic longitude may be in the interval of (345,360] and [0,15) due to the 360 degree circularity of the angle. If the value falls into the previous interval, it needs to be corrected.
                 longitude = ((term == 0) && (longitude > 345.0)) ? longitude - 360.0 : longitude;
                 if (longitude > (int)term)
                 {
@@ -334,11 +198,11 @@ namespace AstroAlgo.SolarSystem
                 }
             } while ((rJD - lJD) > 0.0001);
 
-            // 分钟+2修正
-            return TimeZoneInfo.ConvertTime(solarTermsTime.AddMinutes(2), TimeZoneInfo.Utc, localZone);
+            // Min +2 correction
+            return TimeZoneInfo.ConvertTime(solarTermsTime.AddMinutes(2), TimeZoneInfo.Utc, localTimeZone);
         }
 
-        internal static void EstimateSTtimeScope(int year, SolarTerm term, out double lJD, out double rJD)
+        internal void EstimateSTtimeScope(int year, SolarTerm term, out double lJD, out double rJD)
         {
             switch (term)
             {
@@ -444,113 +308,6 @@ namespace AstroAlgo.SolarSystem
                     break;
             }
         }
-
-        #endregion
-
-        #region OldMethod
-        /*
-
-        /// <summary>
-        /// 计算指定时间与地点的太阳高度角
-        /// </summary>
-        /// <param name="date">时间</param>
-        /// <param name="latitude">纬度</param>
-        /// <param name="longitude">经度</param>
-        /// <returns>太阳高度角(-90°-90°)</returns>
-        public static double ElevationAngle(DateTime date, double latitude, double longitude)
-        {
-            var coord = EquatorialCoordinate(date);
-            double ra = coord.RA;
-            double dec = coord.Dec;
-            double localSiderealTime = SiderealTime.LocalSiderealTime(date, TimeZoneInfo.Local, longitude);
-
-            double sinH = Math.Sin(latitude * Math.PI / 180.0) * Math.Sin(dec * Math.PI / 180.0) + Math.Cos(latitude * Math.PI / 180.0) * Math.Cos(dec * Math.PI / 180.0) * Math.Cos((localSiderealTime - ra) * Math.PI / 180.0);
-            double H = Math.Asin(sinH) * 180.0 / Math.PI;
-
-            return H;
-        }
-
-        /// <summary>
-        /// 计算指定时间与地点的太阳中天高度角
-        /// </summary>
-        /// <param name="date"></param>
-        /// <param name="latitude"></param>
-        /// <param name="longitude"></param>
-        /// <returns></returns>
-        public static double CulminationAngle(DateTime date, double latitude)
-        {
-            var coord = EquatorialCoordinate(date);
-            double dec = coord.Dec;
-
-            double sinH = Math.Sin(latitude * Math.PI / 180.0) * Math.Sin(dec * Math.PI / 180.0) + Math.Cos(latitude * Math.PI / 180.0) * Math.Cos(dec * Math.PI / 180.0);
-            double H = Math.Asin(sinH) * 180.0 / Math.PI;
-
-            return H;
-        }
-
-        /// <summary>
-        /// 计算指定时间与地点的太阳方位角
-        /// </summary>
-        /// <param name="date">时间</param>
-        /// <param name="latitude">纬度</param>
-        /// <param name="longitude">经度</param>
-        /// <returns>太阳方位角(0°-360°)</returns>
-        public static double Azimuth(DateTime date, double latitude, double longitude)
-        {
-            double elevationAngle = ElevationAngle(date, latitude, longitude);
-
-            var coord = EquatorialCoordinate(date);
-            double ra = coord.RA;
-            double dec = coord.Dec;
-            double localSiderealTime = SiderealTime.LocalSiderealTime(date, TimeZoneInfo.Local, longitude);
-
-            double omega = localSiderealTime - ra;
-
-            double cosA = (Math.Sin(dec * (Math.PI / 180.0)) - Math.Sin(elevationAngle * (Math.PI / 180.0)) * Math.Sin(latitude * (Math.PI / 180.0))) / (Math.Cos(elevationAngle * (Math.PI / 180.0)) * Math.Cos(latitude * (Math.PI / 180.0)));
-            
-            double A;
-            if (omega < 0)
-            {
-                A = Math.Acos(cosA) * 180.0 / Math.PI;
-            }
-            else
-            {
-                A = 360 - (Math.Acos(cosA) * 180.0 / Math.PI);
-            }
-
-            return A;
-        }
-
-        /// <summary>
-        /// 将太阳高度角转换为区时
-        /// </summary>
-        /// <param name="date">时间</param>
-        /// <param name="angle">太阳高度角(-90°-90°)</param>
-        /// <param name="latitude">纬度</param>
-        /// <param name="longitude">经度</param>
-        /// <returns>单位为“度”的区时</returns>
-        public static double[] ElevationAngle2Time(DateTime date, double angle, double latitude, double longitude)
-        {
-            var coord = EquatorialCoordinate(date);
-            double ra = coord.RA;
-            double dec = coord.Dec;
-
-            double sinH = Math.Sin(angle * (Math.PI / 180.0));
-            double cosT = (sinH - Math.Sin(latitude * Math.PI / 180.0) * Math.Sin(dec * Math.PI / 180.0)) / (Math.Cos(latitude * Math.PI / 180.0) * Math.Cos(dec * Math.PI / 180.0));
-            double T = Math.Acos(cosT) * 180.0 / Math.PI;
-
-            double t1 = 360 - T;
-            double t2 = T;
-
-            double localSiderealTime1 = t1 + ra;
-            double zoneTime1 = SiderealTime.LocalSiderealTime2ZoneTime(localSiderealTime1, date, TimeZoneInfo.Local, longitude);
-
-            double localSiderealTime2 = t2 + ra;
-            double zoneTime2 = SiderealTime.LocalSiderealTime2ZoneTime(localSiderealTime2, date, TimeZoneInfo.Local, longitude);
-
-            return new double[] { zoneTime1, zoneTime2 };
-        }
-        */
 
         #endregion
     }

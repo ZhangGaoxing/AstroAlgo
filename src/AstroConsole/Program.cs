@@ -1,4 +1,5 @@
 ﻿using AstroAlgo.Basic;
+using AstroAlgo.SolarSystem;
 using System;
 
 namespace AstroConsole
@@ -7,8 +8,8 @@ namespace AstroConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(new DateTime(2008, 12, 31).DayOfYear);
-            Console.WriteLine(Julian.GetDayOfYear(new DateTime(2008, 12, 31)));
+            Sun s = new Sun(34, 115, TimeZoneInfo.Local);
+            Console.WriteLine(s.Rise);
         }
     }
 }

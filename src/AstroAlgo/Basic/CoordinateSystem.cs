@@ -457,7 +457,7 @@ namespace AstroAlgo.Basic
         /// </summary>
         /// <param name="e">Equator coordinates.</param>
         /// <returns>Ecliptic coordinates.</returns>
-        public static Ecliptic Equatorial2Ecliptic(Equator e)
+        public static Ecliptic Equator2Ecliptic(Equator e)
         {
             double alpha = e.RA;
             double delta = e.Dec;
@@ -489,7 +489,7 @@ namespace AstroAlgo.Basic
         /// <param name="time">Local time(It is used to calculate the ecliptic obliquity).</param>
         /// <param name="isApparent">Is it the apparent equator coordinates.</param>
         /// <returns>Ecliptic coordinates.</returns>
-        public static Ecliptic Equatorial2Ecliptic(Equator e, DateTime time, bool isApparent)
+        public static Ecliptic Equator2Ecliptic(Equator e, DateTime time, bool isApparent)
         {
             double alpha = e.RA;
             double delta = e.Dec;
