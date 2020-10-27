@@ -5,24 +5,46 @@ using System;
 namespace AstroAlgo.SolarSystem
 {
     /// <summary>
-    /// 太阳
+    /// The star at the center of the solar system.
     /// </summary>
     public class Sun : Star
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sun"/>.
+        /// </summary>
         public Sun() : base()
         {
         }
 
-        /// <inheritdoc/>
-        public Sun(double latitude, double longitude, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTimeZone)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sun"/>.
+        /// </summary>
+        /// <param name="latitude">Latitude of observation site.</param>
+        /// <param name="longitude">Longitude of observation site.</param>
+        public Sun(double latitude, double longitude) : base(latitude, longitude)
         {
         }
 
-        #region Method
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Sun"/>.
+        /// </summary>
+        /// <param name="latitude">Latitude of observation site.</param>
+        /// <param name="longitude">Longitude of observation site.</param>
+        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="localTimeZone">Time zone of observation site.</param>
+        public Sun(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        {
+        }
 
         /// <inheritdoc/>
-        public override Equator GetEquatorialCoordinate(DateTime time, bool isApparent = false)
+        public override Ecliptic GetEclipticCoordinate(DateTime time, bool isApparent = false)
+        {
+            var e = GetEquatorCoordinate(time, isApparent);
+            return CoordinateSystem.Equator2Ecliptic(e, time, isApparent);
+        }
+
+        /// <inheritdoc/>
+        public override Equator GetEquatorCoordinate(DateTime time, bool isApparent = false)
         {
             double T = (Julian.ToJulianDay(time) - 2451545.0) / 36525.0;
 
@@ -60,7 +82,7 @@ namespace AstroAlgo.SolarSystem
                 delta = Math.Asin(sinDelta) * (180.0 / Math.PI);
 
                 alpha = Math.Atan2(Math.Cos(CoordinateSystem.GetEclipticObliquity(time, false) * (Math.PI / 180.0)) * Math.Sin(theta2000 * (Math.PI / 180.0)), Math.Cos(theta2000 * (Math.PI / 180.0))) * (180.0 / Math.PI);
-            }            
+            }
 
             if (alpha <= 0)
             {
@@ -184,7 +206,7 @@ namespace AstroAlgo.SolarSystem
             {
                 solarTermsJD = ((rJD - lJD) * 0.618) + lJD;
                 solarTermsTime = Julian.ToCalendarDay(solarTermsJD);
-                longitude = CoordinateSystem.Equator2Ecliptic(GetEquatorialCoordinate(solarTermsTime, true), solarTermsTime, true).Longitude;
+                longitude = CoordinateSystem.Equator2Ecliptic(GetEquatorCoordinate(solarTermsTime, true), solarTermsTime, true).Longitude;
 
                 // In the iterative approximation of 0 degree of ecliptic longitude, the estimated value of ecliptic longitude may be in the interval of (345,360] and [0,15) due to the 360 degree circularity of the angle. If the value falls into the previous interval, it needs to be corrected.
                 longitude = ((term == 0) && (longitude > 345.0)) ? longitude - 360.0 : longitude;
@@ -214,7 +236,7 @@ namespace AstroAlgo.SolarSystem
                     lJD = Julian.ToJulianDay(new DateTime(year, 2, 16));
                     rJD = Julian.ToJulianDay(new DateTime(year, 2, 24));
                     break;
-                case SolarTerm.InsectsAwakening:
+                case SolarTerm.WakingOfInsects:
                     lJD = Julian.ToJulianDay(new DateTime(year, 3, 4));
                     rJD = Julian.ToJulianDay(new DateTime(year, 3, 9));
                     break;
@@ -222,7 +244,7 @@ namespace AstroAlgo.SolarSystem
                     lJD = Julian.ToJulianDay(new DateTime(year, 3, 16));
                     rJD = Julian.ToJulianDay(new DateTime(year, 3, 24));
                     break;
-                case SolarTerm.FreshGreen:
+                case SolarTerm.PureBrightness:
                     lJD = Julian.ToJulianDay(new DateTime(year, 4, 4));
                     rJD = Julian.ToJulianDay(new DateTime(year, 4, 9));
                     break;
@@ -282,11 +304,11 @@ namespace AstroAlgo.SolarSystem
                     lJD = Julian.ToJulianDay(new DateTime(year, 11, 4));
                     rJD = Julian.ToJulianDay(new DateTime(year, 11, 9));
                     break;
-                case SolarTerm.LightSnow:
+                case SolarTerm.LesserSnow:
                     lJD = Julian.ToJulianDay(new DateTime(year, 11, 16));
                     rJD = Julian.ToJulianDay(new DateTime(year, 11, 24));
                     break;
-                case SolarTerm.HeavySnow:
+                case SolarTerm.GreaterSnow:
                     lJD = Julian.ToJulianDay(new DateTime(year, 12, 4));
                     rJD = Julian.ToJulianDay(new DateTime(year, 12, 9));
                     break;
@@ -308,7 +330,5 @@ namespace AstroAlgo.SolarSystem
                     break;
             }
         }
-
-        #endregion
     }
 }

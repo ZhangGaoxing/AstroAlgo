@@ -1,132 +1,200 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AstroAlgo.Models
+﻿namespace AstroAlgo.Models
 {
     /// <summary>
-    /// 二十四节气
+    /// The 24 solar terms.
     /// </summary>
     public enum SolarTerm
     {
         /// <summary>
-        /// 立春：太阳黄经为315度。
+        /// Sun's ecliptic longitude is 315 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 立春(lìchūn).
+        /// </remarks>
         BeginningOfSpring = 315,
 
         /// <summary>
-        /// 雨水：太阳黄经为330°
+        /// Sun's ecliptic longitude is 330 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 雨水(yǔshuǐ).
+        /// </remarks>
         RainWater = 330,
 
         /// <summary>
-        /// 惊蛰：太阳黄经为345°
+        /// Sun's ecliptic longitude is 345 degrees.
         /// </summary>
-        InsectsAwakening = 345,
+        /// <remarks>
+        /// Chinese name: 惊蛰(jīngzhé).
+        /// </remarks>
+        WakingOfInsects = 345,
 
         /// <summary>
-        /// 春分：太阳黄经为0°。
+        /// Sun's ecliptic longitude is 0 degree.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 春分(chūnfēn).
+        /// </remarks>
         SpringEquinox = 0,
 
         /// <summary>
-        /// 清明：太阳黄经为15°。
+        /// Sun's ecliptic longitude is 15 degrees.
         /// </summary>
-        FreshGreen = 15,
+        /// <remarks>
+        /// Chinese name: 清明(qīngmíng).
+        /// </remarks>
+        PureBrightness = 15,
 
         /// <summary>
-        /// 谷雨：太阳黄经为30°。
+        /// Sun's ecliptic longitude is 30 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 谷雨(gǔyǔ).
+        /// </remarks>
         GrainRain = 30,
 
         /// <summary>
-        /// 立夏：斗指东南。太阳黄经为45°。
+        /// Sun's ecliptic longitude is 45 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 立夏(lìxià).
+        /// </remarks>
         BeginningOfSummer = 45,
 
         /// <summary>
-        /// 小满：太阳黄经为60°。
+        /// Sun's ecliptic longitude is 60 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 小满(xiǎomǎn).
+        /// </remarks>
         LesserFullness = 60,
 
         /// <summary>
-        /// 芒种：太阳黄经为75°。
+        /// Sun's ecliptic longitude is 75 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 芒种(mángzhòng).
+        /// </remarks>
         GrainInEar = 75,
 
         /// <summary>
-        /// 夏至：太阳黄经为90°。
+        /// Sun's ecliptic longitude is 90 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 夏至(xiàzhì).
+        /// </remarks>
         SummerSolstice = 90,
 
         /// <summary>
-        /// 小暑：太阳黄经为105°。
+        /// Sun's ecliptic longitude is 105 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 小暑(xiǎoshǔ).
+        /// </remarks>
         LesserHeat = 105,
 
         /// <summary>
-        /// 大暑：太阳黄经为120°。
+        /// Sun's ecliptic longitude is 120 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 大暑(dàshǔ).
+        /// </remarks>
         GreaterHeat = 120,
 
         /// <summary>
-        /// 立秋：太阳黄经为135°。
+        /// Sun's ecliptic longitude is 135 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 立秋(lìqiū).
+        /// </remarks>
         BeginningOfAutumn = 135,
 
         /// <summary>
-        /// 处暑：太阳黄经为150°。
+        /// Sun's ecliptic longitude is 150 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 处暑(chǔshǔ).
+        /// </remarks>
         EndOfHeat = 150,
 
         /// <summary>
-        /// 白露：太阳黄经为165°。
+        /// Sun's ecliptic longitude is 165 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 白露(báilù).
+        /// </remarks>
         WhiteDew = 165,
 
         /// <summary>
-        /// 秋分：太阳黄经为180°
+        /// Sun's ecliptic longitude is 180 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 秋分(qiūfēn).
+        /// </remarks>
         AutumnalEquinox = 180,
 
         /// <summary>
-        /// 寒露：太阳黄经为195°。
+        /// Sun's ecliptic longitude is 195 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 寒露(hánlù).
+        /// </remarks>
         ColdDew = 195,
 
         /// <summary>
-        /// 霜降：太阳黄经为210°。
+        /// Sun's ecliptic longitude is 210 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 霜降(shuāngjiàng).
+        /// </remarks>
         FirstFrost = 210,
 
         /// <summary>
-        /// 立冬：太阳黄经为225°。
+        /// Sun's ecliptic longitude is 225 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 立冬(lìdōng).
+        /// </remarks>
         BeginningOfWinter = 225,
 
         /// <summary>
-        /// 小雪：太阳黄经为240°。
+        /// Sun's ecliptic longitude is 240 degrees.
         /// </summary>
-        LightSnow = 240,
+        /// <remarks>
+        /// Chinese name: 小雪(xiǎoxuě).
+        /// </remarks>
+        LesserSnow = 240,
 
         /// <summary>
-        /// 大雪：太阳黄经为255°。
+        /// Sun's ecliptic longitude is 255 degrees.
         /// </summary>
-        HeavySnow = 255,
+        /// <remarks>
+        /// Chinese name: 大雪(dàxuě).
+        /// </remarks>
+        GreaterSnow = 255,
 
         /// <summary>
-        /// 冬至：太阳黄经为270°。
+        /// Sun's ecliptic longitude is 270 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 冬至(dōngzhì).
+        /// </remarks>
         WinterSolstice = 270,
 
         /// <summary>
-        /// 小寒：太阳黄经为285°。
+        /// Sun's ecliptic longitude is 285 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 小寒(xiǎohán).
+        /// </remarks>
         LesserCold = 285,
 
         /// <summary>
-        /// 大寒：太阳黄经为300°。
+        /// Sun's ecliptic longitude is 300 degrees.
         /// </summary>
+        /// <remarks>
+        /// Chinese name: 大寒(dàhán).
+        /// </remarks>
         GreaterCold = 300
     }
 }

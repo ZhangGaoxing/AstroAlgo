@@ -51,7 +51,7 @@ namespace AstroAlgo.Basic
             else
             {
                 return JD;
-            }           
+            }
         }
 
         /// <summary>

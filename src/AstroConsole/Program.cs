@@ -8,8 +8,7 @@ namespace AstroConsole
     {
         static void Main(string[] args)
         {
-            Sun s = new Sun(34, 115, TimeZoneInfo.Local);
-            Console.WriteLine(s.Rise);
+            
         }
     }
 }

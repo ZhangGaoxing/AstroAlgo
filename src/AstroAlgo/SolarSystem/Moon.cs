@@ -1,53 +1,67 @@
 ﻿using AstroAlgo.Basic;
 using AstroAlgo.Models;
-
 using System;
 
 namespace AstroAlgo.SolarSystem
 {
     /// <summary>
-    /// 月球
+    /// <see cref="Earth"/>'s natural satellite.
     /// </summary>
     public class Moon
     {
-        private double latitude;
-        private double longitude;
-        private TimeZoneInfo localZone;
-
-        #region Property
+        #region Properties
 
         /// <summary>
-        /// 当前视赤道坐标
+        /// Latitude of observation site.
         /// </summary>
-        public Equator Equator
+        public virtual double Latitude { get; set; }
+
+        /// <summary>
+        /// Longitude of observation site.
+        /// </summary>
+        public virtual double Longitude { get; set; }
+
+        /// <summary>
+        /// Time of observation site.
+        /// </summary>
+        public virtual DateTime DateTime { get; set; }
+
+        /// <summary>
+        /// Time zone of observation site.
+        /// </summary>
+        public virtual TimeZoneInfo LocalTimeZone { get; set; }
+
+        /// <summary>
+        /// Apparent equator coordinates at <see cref="DateTime"/>.
+        /// </summary>
+        public virtual Equator Equator
         {
             get
             {
-                return CoordinateSystem.Ecliptic2Equator(Ecliptic, DateTime.Now, true);
+                return GetEquatorCoordinate(DateTime, true);
             }
         }
 
         /// <summary>
-        /// 当前视黄道坐标
+        /// Apparent geocentric ecliptic coordinates at <see cref="DateTime"/>.
         /// </summary>
-        public Ecliptic Ecliptic
+        public virtual Ecliptic Ecliptic
         {
             get
             {
-                return EclipticalCoordinate(DateTime.Now, true);
+                return GetEclipticCoordinate(DateTime, true);
             }
         }
 
         /// <summary>
-        /// 当日升时间
+        /// Rising time of the day.
         /// </summary>
-        public TimeSpan Rise
+        public virtual TimeSpan Rising
         {
             get
             {
-                var e0 = EclipticalCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var e = CoordinateSystem.Ecliptic2Equator(e0, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, latitude, longitude, DateTime.Now, localZone);
+                var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
+                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours(time[0] / 15.0);
 
@@ -56,15 +70,14 @@ namespace AstroAlgo.SolarSystem
         }
 
         /// <summary>
-        /// 当日中天时间
+        /// Culmination time of the day.
         /// </summary>
-        public TimeSpan Culmination
+        public virtual TimeSpan Culmination
         {
             get
             {
-                var e0 = EclipticalCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var e = CoordinateSystem.Ecliptic2Equator(e0, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, latitude, longitude, DateTime.Now, localZone);
+                var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
+                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours((time[0] + time[1]) / 30.0);
                 if (time[0] > time[1])
@@ -86,15 +99,14 @@ namespace AstroAlgo.SolarSystem
         }
 
         /// <summary>
-        /// 当日落时间
+        /// Setting time of the day.
         /// </summary>
-        public TimeSpan Down
+        public virtual TimeSpan Setting
         {
             get
             {
-                var e0 = EclipticalCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var e = CoordinateSystem.Ecliptic2Equator(e0, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, latitude, longitude, DateTime.Now, localZone);
+                var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
+                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours(time[1] / 15.0);
 
@@ -103,62 +115,98 @@ namespace AstroAlgo.SolarSystem
         }
 
         /// <summary>
-        /// 当前月地距离(km)
+        /// Distance from Earth in AU at <see cref="DateTime"/>.
         /// </summary>
-        public double ToEarth 
-        { 
-            get 
-            {
-                return ToEarthDistance(DateTime.Now);
-            } 
-        }
-
-        /// <summary>
-        /// 当前高度角
-        /// </summary>
-        public double ElevationAngle 
+        public virtual double ToEarth
         {
-            get 
+            get
             {
-                return CoordinateSystem.GetElevationAngle(DateTime.Now, Equator, latitude, longitude);
+                return GetToEarthDistance(DateTime);
             }
         }
 
         /// <summary>
-        /// 当前方位角
+        /// Elevation angle at <see cref="DateTime"/>.
         /// </summary>
-        public double Azimuth
+        public virtual double ElevationAngle
         {
             get
             {
-                return CoordinateSystem.GetAzimuth(DateTime.Now, Equator, latitude, longitude);
+                return CoordinateSystem.GetElevationAngle(DateTime, Equator, Latitude, Longitude);
+            }
+        }
+
+        /// <summary>
+        /// Azimuth at <see cref="DateTime"/>.
+        /// </summary>
+        public virtual double Azimuth
+        {
+            get
+            {
+                return CoordinateSystem.GetAzimuth(DateTime, Equator, Latitude, Longitude);
             }
         }
 
         #endregion
 
         /// <summary>
-        /// 初始化一个月球实例
+        /// Initializes a new instance of the <see cref="Moon"/>.
         /// </summary>
-        /// <param name="latitude">纬度</param>
-        /// <param name="longitude">经度</param>
-        /// <param name="localZone">时区</param>
-        public Moon(double latitude, double longitude, TimeZoneInfo localZone)
+        public Moon()
         {
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.localZone = localZone;
+            Latitude = 0;
+            Longitude = 0;
+            DateTime = DateTime.Now;
+            LocalTimeZone = TimeZoneInfo.Local;
         }
 
-        #region Method
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Moon"/>.
+        /// </summary>
+        /// <param name="latitude">Latitude of observation site.</param>
+        /// <param name="longitude">Longitude of observation site.</param>
+        public Moon(double latitude, double longitude)
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+            DateTime = DateTime.Now;
+            LocalTimeZone = TimeZoneInfo.Local;
+        }
 
         /// <summary>
-        /// 计算指定时间的月球黄经与黄纬
+        /// Initializes a new instance of the <see cref="Moon"/>.
         /// </summary>
-        /// <param name="time">时间</param>
-        /// <param name="isApparent">是否为视黄道坐标</param>
-        /// <returns>黄道坐标</returns>
-        public static Ecliptic EclipticalCoordinate(DateTime time, bool isApparent = false)
+        /// <param name="latitude">Latitude of observation site.</param>
+        /// <param name="longitude">Longitude of observation site.</param>
+        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="localTimeZone">Time zone of observation site.</param>
+        public Moon(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone)
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+            DateTime = localTime;
+            LocalTimeZone = localTimeZone;
+        }
+
+        /// <summary>
+        /// Calculates the equator coordinates of <see cref="Moon"/> at a specified time.
+        /// </summary>
+        /// <param name="time">Local time.</param>
+        /// <param name="isApparent">Is it the apparent equator coordinates.</param>
+        /// <returns>Equator coordinates.</returns>
+        public Equator GetEquatorCoordinate(DateTime time, bool isApparent = false)
+        {
+            var e = GetEclipticCoordinate(time, isApparent);
+            return CoordinateSystem.Ecliptic2Equator(e, time, isApparent);
+        }
+
+        /// <summary>
+        /// Calculates the geocentric ecliptic coordinates of <see cref="Moon"/> at a specified time.
+        /// </summary>
+        /// <param name="time">Local time.</param>
+        /// <param name="isApparent">Is it the apparent ecliptic coordinates.</param>
+        /// <returns>Geocentric ecliptic coordinates.</returns>
+        public Ecliptic GetEclipticCoordinate(DateTime time, bool isApparent = false)
         {
             double T = (Julian.ToJulianDay(time) - 2451545) / 36525.0;
             // 月球平黄经
@@ -395,7 +443,7 @@ namespace AstroAlgo.SolarSystem
                 1021 * Math.Sin((4 * D - F) * (Math.PI / 180.0)) +
                 833 * Math.Sin((4 * D - M1 + F) * (Math.PI / 180.0)) +
                 777 * Math.Sin((M1 - 3 * F) * (Math.PI / 180.0)) +
-                671 * Math.Sin((4 * D - 2 * M1+F) * (Math.PI / 180.0)) +
+                671 * Math.Sin((4 * D - 2 * M1 + F) * (Math.PI / 180.0)) +
                 607 * Math.Sin((2 * D - 3 * F) * (Math.PI / 180.0)) +
                 596 * Math.Sin((2 * D + 2 * M1 - F) * (Math.PI / 180.0)) +
                 491 * E * Math.Sin((2 * D - M + M1 - F) * (Math.PI / 180.0)) -
@@ -431,13 +479,13 @@ namespace AstroAlgo.SolarSystem
 
             if (!isApparent)
             {
-               double longitude = L1 + SigmaI / 1000000.0;
-               double latitude = SigmaB / 1000000.0;
+                double longitude = L1 + SigmaI / 1000000.0;
+                double latitude = SigmaB / 1000000.0;
 
-               if (longitude < 0)
-               {
-                   longitude = 360 + longitude;
-               }
+                if (longitude < 0)
+                {
+                    longitude = 360 + longitude;
+                }
 
                 e = new Ecliptic()
                 {
@@ -468,11 +516,11 @@ namespace AstroAlgo.SolarSystem
         }
 
         /// <summary>
-        /// 计算指定时间的地月距离（km）
+        /// Calculates the <see cref="Moon"/> <see cref="Earth"/> distance at a specified time.
         /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns>距离，单位为千米</returns>
-        public static double ToEarthDistance(DateTime time)
+        /// <param name="time">Local time.</param>
+        /// <returns>Distance in kilometers.</returns>
+        public double GetToEarthDistance(DateTime time)
         {
             double T = (Julian.ToJulianDay(time) - 2451545) / 36525.0;
             // 月球平黄经
@@ -555,7 +603,5 @@ namespace AstroAlgo.SolarSystem
 
             return distance;
         }
-
-        #endregion
     }
 }

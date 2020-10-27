@@ -1,23 +1,51 @@
 ﻿using AstroAlgo.Basic;
 using AstroAlgo.Models;
-
 using System;
 
 namespace AstroAlgo.SolarSystem
 {
     /// <summary>
-    /// 地球
+    /// The third planet from the <see cref="Sun"/> in the solar system.
     /// </summary>
-    public class Earth
+    public class Earth : Planet
     {
         /// <summary>
-        /// 计算日心黄道坐标
+        /// Initializes a new instance of the <see cref="Earth"/>.
         /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns>日心黄道坐标</returns>
-        public static Ecliptic HeliocentricEclipticCoordinate(DateTime time)
+        public Earth() : base()
         {
-            double t = (Julian.ToJulianDay(time) - 2451545) / 365250.0;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Earth"/>.
+        /// </summary>
+        /// <param name="latitude">Latitude of observation site.</param>
+        /// <param name="longitude">Longitude of observation site.</param>
+        public Earth(double latitude, double longitude) : base(latitude, longitude)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Earth"/>.
+        /// </summary>
+        /// <param name="latitude">Latitude of observation site.</param>
+        /// <param name="longitude">Longitude of observation site.</param>
+        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="localTimeZone">Time zone of observation site.</param>
+        public Earth(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        {
+        }
+
+        /// <inheritdoc/>
+        public override Equator GetEquatorCoordinate(DateTime time, bool isApparent = false) => throw new NotSupportedException("Earth does not have these elements.");
+
+        /// <inheritdoc/>
+        public override Ecliptic GetEclipticCoordinate(DateTime time, bool isApparent = false) => throw new NotSupportedException("Earth does not have these elements.");
+
+        /// <inheritdoc/>
+        public override Ecliptic GetHeliocentricEclipticCoordinate(DateTime time, double julianDay = 0)
+        {
+            double t = (Julian.ToJulianDay(time) - julianDay - 2451545) / 365250.0;
 
             return new Ecliptic
             {
@@ -26,14 +54,13 @@ namespace AstroAlgo.SolarSystem
             };
         }
 
-        /// <summary>
-        /// 计算到太阳的距离
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns>距离（天文单位）</returns>
-        public static double ToSunDistance(DateTime time)
+        /// <inheritdoc/>
+        public override OrbitalElement GetOrbitalElement(DateTime time) => throw new NotSupportedException("Earth does not have these elements.");
+
+        /// <inheritdoc/>
+        public override double GetToSunDistance(DateTime time, double julianDay = 0)
         {
-            double t = (Julian.ToJulianDay(time) - 2451545) / 365250.0;
+            double t = (Julian.ToJulianDay(time) - julianDay - 2451545) / 365250.0;
 
             return Earth_R0(t) + Earth_R1(t) + Earth_R2(t) + Earth_R3(t) + Earth_R4(t) + Earth_R5(t);
         }

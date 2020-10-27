@@ -6,170 +6,51 @@ using System;
 namespace AstroAlgo.SolarSystem
 {
     /// <summary>
-    /// 火星
+    /// The fourth planet from the <see cref="Sun"/> in the solar system.
     /// </summary>
-    public class Mars : IPlanet
+    public class Mars : Planet
     {
-        private double latitude;
-        private double longitude;
-        private TimeZoneInfo localZone;
-
-        #region Property
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mars"/>.
+        /// </summary>
+        public Mars() : base()
+        {
+        }
 
         /// <summary>
-        /// 当前视赤道坐标
+        /// Initializes a new instance of the <see cref="Mars"/>.
         /// </summary>
-        public Equator Equator
+        /// <param name="latitude">Latitude of observation site.</param>
+        /// <param name="longitude">Longitude of observation site.</param>
+        public Mars(double latitude, double longitude) : base(latitude, longitude)
         {
-            get
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mars"/>.
+        /// </summary>
+        /// <param name="latitude">Latitude of observation site.</param>
+        /// <param name="longitude">Longitude of observation site.</param>
+        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="localTimeZone">Time zone of observation site.</param>
+        public Mars(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        {
+        }
+
+        /// <inheritdoc/>
+        public override Ecliptic GetHeliocentricEclipticCoordinate(DateTime time, double julianDay = 0)
+        {
+            double t = (Julian.ToJulianDay(time) - julianDay - 2451545) / 365250.0;
+
+            return new Ecliptic
             {
-                var e = EclipticalCoordinate(DateTime.Now, true);
-                return CoordinateSystem.Ecliptic2Equator(e, DateTime.Now, true);
-            }
+                Longitude = BasicTools.AngleSimplification((Mars_L0(t) + Mars_L1(t) + Mars_L2(t) + Mars_L3(t) + Mars_L4(t) + Mars_L5(t)) * (180 / Math.PI)),
+                Latitude = (Mars_B0(t) + Mars_B1(t) + Mars_B2(t) + Mars_B3(t) + Mars_B4(t) + Mars_B5(t)) * (180 / Math.PI)
+            };
         }
 
-        /// <summary>
-        /// 当前视黄道坐标
-        /// </summary>
-        public Ecliptic Ecliptic
-        {
-            get
-            {
-                return EclipticalCoordinate(DateTime.Now, true);
-            }
-        }
-
-        /// <summary>
-        /// 当日升时间
-        /// </summary>
-        public TimeSpan Rise
-        {
-            get
-            {
-                var e0 = EclipticalCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var e = CoordinateSystem.Ecliptic2Equator(e0, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.5667, latitude, longitude, DateTime.Now, localZone);
-
-                var span = TimeSpan.FromHours(time[0] / 15.0);
-
-                return new TimeSpan(span.Hours, span.Minutes, span.Seconds);
-            }
-        }
-
-        /// <summary>
-        /// 当日中天时间
-        /// </summary>
-        public TimeSpan Culmination
-        {
-            get
-            {
-                var e0 = EclipticalCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var e = CoordinateSystem.Ecliptic2Equator(e0, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.5667, latitude, longitude, DateTime.Now, localZone);
-
-                var span = TimeSpan.FromHours((time[0] + time[1]) / 30.0);
-                if (time[0] > time[1])
-                {
-                    if (span.Hours > 12)
-                    {
-                        return new TimeSpan(span.Hours - 12, span.Minutes, span.Seconds);
-                    }
-                    else
-                    {
-                        return new TimeSpan(span.Hours + 12, span.Minutes, span.Seconds);
-                    }
-                }
-                else
-                {
-                    return new TimeSpan(span.Hours, span.Minutes, span.Seconds);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 当日落时间
-        /// </summary>
-        public TimeSpan Down
-        {
-            get
-            {
-                var e0 = EclipticalCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var e = CoordinateSystem.Ecliptic2Equator(e0, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.5667, latitude, longitude, DateTime.Now, localZone);
-
-                var span = TimeSpan.FromHours(time[1] / 15.0);
-
-                return new TimeSpan(span.Hours, span.Minutes, span.Seconds);
-            }
-        }
-
-        /// <summary>
-        /// 当前与地球距离(AU)
-        /// </summary>
-        public double ToEarth
-        {
-            get
-            {
-                return ToEarthDistance(DateTime.Now);
-            }
-        }
-
-        /// <summary>
-        /// 当前与太阳距离(AU)
-        /// </summary>
-        public double ToSun
-        {
-            get
-            {
-                return ToSunDistance(DateTime.Now);
-            }
-        }
-
-        /// <summary>
-        /// 当前高度角
-        /// </summary>
-        public double ElevationAngle
-        {
-            get
-            {
-                return CoordinateSystem.GetElevationAngle(DateTime.Now, Equator, latitude, longitude);
-            }
-        }
-
-        /// <summary>
-        /// 当前方位角
-        /// </summary>
-        public double Azimuth
-        {
-            get
-            {
-                return CoordinateSystem.GetAzimuth(DateTime.Now, Equator, latitude, longitude);
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// 初始化一个火星实例
-        /// </summary>
-        /// <param name="latitude">纬度</param>
-        /// <param name="longitude">经度</param>
-        /// <param name="localZone">时区</param>
-        public Mars(double latitude, double longitude, TimeZoneInfo localZone)
-        {
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.localZone = localZone;
-        }
-
-        #region Method
-
-        /// <summary>
-        /// 计算行星轨道要素
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns>轨道要素</returns>
-        public static OrbitalElement GetOrbitalElement(DateTime time)
+        /// <inheritdoc/>
+        public override OrbitalElement GetOrbitalElement(DateTime time)
         {
             double T = (Julian.ToJulianDay(time) - 2451545) / 36525.0;
 
@@ -196,173 +77,13 @@ namespace AstroAlgo.SolarSystem
             };
         }
 
-        /// <summary>
-        /// 计算日心黄道坐标
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns>日心黄道坐标</returns>
-        public static Ecliptic HeliocentricEclipticCoordinate(DateTime time)
+        /// <inheritdoc/>
+        public override double GetToSunDistance(DateTime time, double julianDay = 0)
         {
-            double t = (Julian.ToJulianDay(time) - 2451545) / 365250.0;
-
-            return new Ecliptic
-            {
-                Longitude = BasicTools.AngleSimplification((Mars_L0(t) + Mars_L1(t) + Mars_L2(t) + Mars_L3(t) + Mars_L4(t) + Mars_L5(t)) * (180 / Math.PI)),
-                Latitude = (Mars_B0(t) + Mars_B1(t) + Mars_B2(t) + Mars_B3(t) + Mars_B4(t) + Mars_B5(t)) * (180 / Math.PI)
-            };
-        }
-
-        /// <summary>
-        /// 计算到太阳的距离
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns>距离（天文单位）</returns>
-        public static double ToSunDistance(DateTime time)
-        {
-            double t = (Julian.ToJulianDay(time) - 2451545) / 365250.0;
+            double t = (Julian.ToJulianDay(time) - julianDay - 2451545) / 365250.0;
 
             return Mars_R0(t) + Mars_R1(t) + Mars_R2(t) + Mars_R3(t) + Mars_R4(t) + Mars_R5(t);
         }
-
-        /// <summary>
-        /// 计算到地球的距离
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns>距离（天文单位）</returns>
-        public static double ToEarthDistance(DateTime time)
-        {
-            var earth = Earth.HeliocentricEclipticCoordinate(time);
-            double r0 = Earth.ToSunDistance(time);
-            var e1 = HeliocentricEclipticCoordinate(time);
-            double r1 = ToSunDistance(time);
-
-            double x1 = r1 * Math.Cos(e1.Latitude * (Math.PI / 180.0)) * Math.Cos(e1.Longitude * (Math.PI / 180.0)) - r0 * Math.Cos(earth.Latitude * (Math.PI / 180.0)) * Math.Cos(earth.Longitude * (Math.PI / 180.0));
-            double y1 = r1 * Math.Cos(e1.Latitude * (Math.PI / 180.0)) * Math.Sin(e1.Longitude * (Math.PI / 180.0)) - r0 * Math.Cos(earth.Latitude * (Math.PI / 180.0)) * Math.Sin(earth.Longitude * (Math.PI / 180.0));
-            double z1 = r1 * Math.Sin(e1.Latitude * (Math.PI / 180.0)) - r0 * Math.Sin(earth.Latitude * (Math.PI / 180.0));
-
-            //double t = 0.0057755183 * Math.Sqrt(x1 * x1 + y1 * y1 + z1 * z1);
-
-            //var e2 = HeliocentricEclipticCoordinate(time, t);
-            //double r2 = ToSunDistance(time, t);
-
-            //double x2 = r2 * Math.Cos(e2.Latitude * (Math.PI / 180.0)) * Math.Cos(e2.Longitude * (Math.PI / 180.0)) - r0 * Math.Cos(earth.Latitude * (Math.PI / 180.0)) * Math.Cos(earth.Longitude * (Math.PI / 180.0));
-            //double y2 = r2 * Math.Cos(e2.Latitude * (Math.PI / 180.0)) * Math.Sin(e2.Longitude * (Math.PI / 180.0)) - r0 * Math.Cos(earth.Latitude * (Math.PI / 180.0)) * Math.Sin(earth.Longitude * (Math.PI / 180.0));
-            //double z2 = r2 * Math.Sin(e2.Latitude * (Math.PI / 180.0)) - r0 * Math.Sin(earth.Latitude * (Math.PI / 180.0));
-
-            //return Math.Sqrt(x2 * x2 + y2 * y2 + z2 * z2);
-
-            return Math.Sqrt(x1 * x1 + y1 * y1 + z1 * z1);
-        }
-
-        /// <summary>
-        /// 计算地心黄道坐标
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <param name="isApparent">是否为视黄道坐标</param>
-        /// <returns>地心视黄道坐标</returns>
-        public static Ecliptic EclipticalCoordinate(DateTime time, bool isApparent = false)
-        {
-            var earth = Earth.HeliocentricEclipticCoordinate(time);
-            double r0 = Earth.ToSunDistance(time);
-            var e1 = HeliocentricEclipticCoordinate(time);
-            double r1 = ToSunDistance(time);
-
-            double x1 = r1 * Math.Cos(e1.Latitude * (Math.PI / 180.0)) * Math.Cos(e1.Longitude * (Math.PI / 180.0)) - r0 * Math.Cos(earth.Latitude * (Math.PI / 180.0)) * Math.Cos(earth.Longitude * (Math.PI / 180.0));
-            double y1 = r1 * Math.Cos(e1.Latitude * (Math.PI / 180.0)) * Math.Sin(e1.Longitude * (Math.PI / 180.0)) - r0 * Math.Cos(earth.Latitude * (Math.PI / 180.0)) * Math.Sin(earth.Longitude * (Math.PI / 180.0));
-            double z1 = r1 * Math.Sin(e1.Latitude * (Math.PI / 180.0)) - r0 * Math.Sin(earth.Latitude * (Math.PI / 180.0));
-
-            if (isApparent)
-            {
-                double t = 0.0057755183 * Math.Sqrt(x1 * x1 + y1 * y1 + z1 * z1);
-
-                var e2 = HeliocentricEclipticCoordinate(time, t);
-                double r2 = ToSunDistance(time, t);
-
-                double x2 = r2 * Math.Cos(e2.Latitude * (Math.PI / 180.0)) * Math.Cos(e2.Longitude * (Math.PI / 180.0)) - r0 * Math.Cos(earth.Latitude * (Math.PI / 180.0)) * Math.Cos(earth.Longitude * (Math.PI / 180.0));
-                double y2 = r2 * Math.Cos(e2.Latitude * (Math.PI / 180.0)) * Math.Sin(e2.Longitude * (Math.PI / 180.0)) - r0 * Math.Cos(earth.Latitude * (Math.PI / 180.0)) * Math.Sin(earth.Longitude * (Math.PI / 180.0));
-                double z2 = r2 * Math.Sin(e2.Latitude * (Math.PI / 180.0)) - r0 * Math.Sin(earth.Latitude * (Math.PI / 180.0));
-                var nutation = CoordinateSystem.GetNutation(time);
-                // 未修正周年光行差
-                // 修正了光行时与黄经章动
-                double latitude = Math.Atan2(z2, Math.Sqrt(x2 * x2 + y2 * y2)) * (180 / Math.PI);
-                double longitude = Math.Atan2(y2, x2) * (180 / Math.PI) + nutation.Longitude;
-
-                if (longitude < 0)
-                {
-                    return new Ecliptic
-                    {
-                        Latitude = latitude,
-                        Longitude = longitude + 360
-                    };
-                }
-                else
-                {
-                    return new Ecliptic
-                    {
-                        Latitude = latitude,
-                        Longitude = longitude
-                    };
-                }
-            }
-            else
-            {
-                double latitude = Math.Atan2(z1, Math.Sqrt(x1 * x1 + y1 * y1)) * (180 / Math.PI);
-                double longitude = Math.Atan2(y1, x1) * (180 / Math.PI);
-
-                if (longitude < 0)
-                {
-                    return new Ecliptic
-                    {
-                        Latitude = latitude,
-                        Longitude = longitude + 360
-                    };
-                }
-                else
-                {
-                    return new Ecliptic
-                    {
-                        Latitude = latitude,
-                        Longitude = longitude
-                    };
-                }
-            }
-        }
-
-        #endregion
-
-        #region internal
-
-        /// <summary>
-        /// 计算日心黄道坐标
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <param name="jd">光行时修正</param>
-        /// <returns>日心黄道坐标</returns>
-        internal static Ecliptic HeliocentricEclipticCoordinate(DateTime time, double jd)
-        {
-            double t = (Julian.ToJulianDay(time) - jd - 2451545) / 365250.0;
-
-            return new Ecliptic
-            {
-                Longitude = BasicTools.AngleSimplification((Mars_L0(t) + Mars_L1(t) + Mars_L2(t) + Mars_L3(t) + Mars_L4(t) + Mars_L5(t)) * (180 / Math.PI)),
-                Latitude = (Mars_B0(t) + Mars_B1(t) + Mars_B2(t) + Mars_B3(t) + Mars_B4(t) + Mars_B5(t)) * (180 / Math.PI)
-            };
-        }
-
-        /// <summary>
-        /// 计算到太阳的距离
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <param name="jd">光行时修正</param>
-        /// <returns>距离（天文单位）</returns>
-        internal static double ToSunDistance(DateTime time, double jd)
-        {
-            double t = (Julian.ToJulianDay(time) - jd - 2451545) / 365250.0;
-
-            return Mars_R0(t) + Mars_R1(t) + Mars_R2(t) + Mars_R3(t) + Mars_R4(t) + Mars_R5(t);
-        }
-
-        #endregion
 
         #region VSOP87
 

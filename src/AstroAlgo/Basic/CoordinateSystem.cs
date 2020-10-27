@@ -358,7 +358,7 @@ namespace AstroAlgo.Basic
         public static double GetAzimuth(DateTime time, Equator e, double latitude, double longitude)
         {
             double elevationAngle = GetElevationAngle(time, e, latitude, longitude);
-            
+
             double ra = e.RA;
             double dec = e.Dec;
 
