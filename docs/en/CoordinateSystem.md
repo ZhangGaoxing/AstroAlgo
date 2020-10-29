@@ -1,6 +1,6 @@
 # Coordinate System
 
-The `CoordinateSystem` class is located in the `AstroAlgo.Basic` namespace. It provided the conversion of equator and ecliptic coordinates and the calculation of coordinate parameters.
+The `CoordinateSystem` class is located in the `AstroAlgo.Basic` namespace. It provides the conversion of equator and ecliptic coordinates and the calculation of coordinate parameters.
 
 ## Nutation
 

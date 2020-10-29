@@ -1,21 +1,21 @@
-# 恒星时
+# Sidereal Time
 
-`SiderealTime` 类位于 `AstroAlgo.Basic` 命名空间下，提供了恒星时的一系列操作。
+The `SiderealTime` class is located in the `AstroAlgo.Basic` namespace. It provides a series of methods for sidereal time.
 
-## 恒星时的计算
+## Calculation of Sidereal Time
 
 ```C#
-// 计算格林尼治平恒星时
+// Calculate Greenwich mean sidereal time
 double ut = SiderealTime.UtMeanSiderealTime(DateTime.Now);
-// 计算指定观测点的平恒星时
+// Calculate local mean sidereal time
 double local = SiderealTime.LocalMeanSiderealTime(localTime: DateTime.Now, localTimeZone: TimeZoneInfo.Local, longitude: 110.25);
 ```
 
-## 恒星时的转换
+## Conversion of Sidereal Time
 
 ```C#
-// 恒星时转指定观测点的区时
+// Convert local mean sidereal time to zone time
 double time = SiderealTime.SiderealTime2ZoneTime(localSiderealTime: local, date: DateTime.Now, localTimeZone: TimeZoneInfo.Local, longitude: 110.25);
-// 力学时与恒星时之差
+// Calculate the difference between dynamical time and universal time
 double diff = SiderealTime.DifferenceDtUt(DateTime.Now);
 ```

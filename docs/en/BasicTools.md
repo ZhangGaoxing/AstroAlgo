@@ -1,6 +1,6 @@
 # Basic Tools
 
-The `BasicTools` class is located in the `AstroAlgo.Basic` namespace, provides the basic calculation functions required by the program.
+The `BasicTools` class is located in the `AstroAlgo.Basic` namespace. It provides the basic calculation functions required by the program.
 
 ## Simplification of Angle
 
