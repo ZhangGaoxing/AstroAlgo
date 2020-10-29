@@ -18,12 +18,12 @@
 
 ## Catalogue
 
-- [AstroAlgo.Models]()
-- [AstroAlgo.Basic]()
-  - [Basic tools](/docs/zh/BasicTools.md)
-  - [Julian day](/docs/zh/Julian.md)
-  - [Sidereal time](/docs/zh/SiderealTime.md)
-  - [Coordinate system](/docs/zh/CoordinateSystem.md)
-- [AstroAlgo.SolarSystem]()
-  - [Sun](/docs/zh/Sun.md)
-  - [Mars](/docs/zh/Mars.md)
+- AstroAlgo.Models
+- AstroAlgo.Basic
+  - [Basic tools](/docs/en/BasicTools.md)
+  - [Julian day](/docs/en/Julian.md)
+  - [Sidereal time](/docs/en/SiderealTime.md)
+  - [Coordinate system](/docs/en/CoordinateSystem.md)
+- AstroAlgo.SolarSystem
+  - [Sun](/docs/en/Sun.md)
+  - [Mars](/docs/en/Mars.md)
