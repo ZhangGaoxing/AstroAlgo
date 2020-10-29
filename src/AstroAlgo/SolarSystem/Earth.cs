@@ -30,9 +30,9 @@ namespace AstroAlgo.SolarSystem
         /// </summary>
         /// <param name="latitude">Latitude of observation site.</param>
         /// <param name="longitude">Longitude of observation site.</param>
-        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="dateTime">Time of observation site.</param>
         /// <param name="localTimeZone">Time zone of observation site.</param>
-        public Earth(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        public Earth(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, dateTime, localTimeZone)
         {
         }
 
@@ -49,7 +49,7 @@ namespace AstroAlgo.SolarSystem
 
             return new Ecliptic
             {
-                Longitude = BasicTools.AngleSimplification((Earth_L0(t) + Earth_L1(t) + Earth_L2(t) + Earth_L3(t) + Earth_L4(t) + Earth_L5(t)) * (180 / Math.PI)),
+                Longitude = BasicTools.SimplifyAngle((Earth_L0(t) + Earth_L1(t) + Earth_L2(t) + Earth_L3(t) + Earth_L4(t) + Earth_L5(t)) * (180 / Math.PI)),
                 Latitude = (Earth_B0(t) + Earth_B1(t) + Earth_B2(t) + Earth_B3(t) + Earth_B4(t) + Earth_B5(t)) * (180 / Math.PI)
             };
         }

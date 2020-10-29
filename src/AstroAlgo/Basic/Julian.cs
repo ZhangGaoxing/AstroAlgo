@@ -46,21 +46,25 @@ namespace AstroAlgo.Basic
 
             if (isModified)
             {
-                return JD - 2400000.5;
+                JD -= 2400000.5;
             }
-            else
-            {
-                return JD;
-            }
+
+            return JD;
         }
 
         /// <summary>
         /// Convert Julian day to <see cref="DateTime"/>.
         /// </summary>
         /// <param name="julianDay">Julian day to convert.</param>
+        /// <param name="isModified">Is it a modified Julian day.</param>
         /// <returns><see cref="DateTime"/></returns>
-        public static DateTime ToCalendarDay(double julianDay)
+        public static DateTime ToCalendarDay(double julianDay, bool isModified = false)
         {
+            if (isModified)
+            {
+                julianDay += 2400000.5;
+            }
+
             double JD = julianDay + 0.5;
             int Z = (int)JD;
             double F = JD - Z;
@@ -121,13 +125,13 @@ namespace AstroAlgo.Basic
         /// <summary>
         /// Calculate the number of days between the given date.
         /// </summary>
-        /// <param name="date1">Date 1.</param>
-        /// <param name="date2">Date 2.</param>
+        /// <param name="time1">Date 1.</param>
+        /// <param name="time2">Date 2.</param>
         /// <returns>Number of days between.</returns>
-        public static double Date2Interval(DateTime date1, DateTime date2)
+        public static double Date2Interval(DateTime time1, DateTime time2)
         {
-            double jd1 = ToJulianDay(date1);
-            double jd2 = ToJulianDay(date2);
+            double jd1 = ToJulianDay(time1);
+            double jd2 = ToJulianDay(time2);
 
             return Math.Abs(jd1 - jd2);
         }
@@ -135,12 +139,12 @@ namespace AstroAlgo.Basic
         /// <summary>
         /// Calculate the date for the given interval of days.
         /// </summary>
-        /// <param name="date">Start date.</param>
+        /// <param name="time">Start date.</param>
         /// <param name="interval">Number of days between.</param>
         /// <returns>End date.</returns>
-        public static DateTime Interval2Date(DateTime date, double interval)
+        public static DateTime Interval2Date(DateTime time, double interval)
         {
-            double jd1 = ToJulianDay(date);
+            double jd1 = ToJulianDay(time);
             double jd2;
 
             jd2 = jd1 + interval;

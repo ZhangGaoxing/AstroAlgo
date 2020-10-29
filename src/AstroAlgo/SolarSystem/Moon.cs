@@ -178,13 +178,13 @@ namespace AstroAlgo.SolarSystem
         /// </summary>
         /// <param name="latitude">Latitude of observation site.</param>
         /// <param name="longitude">Longitude of observation site.</param>
-        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="dateTime">Time of observation site.</param>
         /// <param name="localTimeZone">Time zone of observation site.</param>
-        public Moon(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone)
+        public Moon(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone)
         {
             Latitude = latitude;
             Longitude = longitude;
-            DateTime = localTime;
+            DateTime = dateTime;
             LocalTimeZone = localTimeZone;
         }
 

@@ -31,9 +31,9 @@ namespace AstroAlgo.SolarSystem
         /// </summary>
         /// <param name="latitude">Latitude of observation site.</param>
         /// <param name="longitude">Longitude of observation site.</param>
-        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="dateTime">Time of observation site.</param>
         /// <param name="localTimeZone">Time zone of observation site.</param>
-        public Jupiter(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        public Jupiter(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, dateTime, localTimeZone)
         {
         }
 
@@ -44,7 +44,7 @@ namespace AstroAlgo.SolarSystem
 
             return new Ecliptic
             {
-                Longitude = BasicTools.AngleSimplification((Jupiter_L0(t) + Jupiter_L1(t) + Jupiter_L2(t) + Jupiter_L3(t) + Jupiter_L4(t) + Jupiter_L5(t)) * (180 / Math.PI)),
+                Longitude = BasicTools.SimplifyAngle((Jupiter_L0(t) + Jupiter_L1(t) + Jupiter_L2(t) + Jupiter_L3(t) + Jupiter_L4(t) + Jupiter_L5(t)) * (180 / Math.PI)),
                 Latitude = (Jupiter_B0(t) + Jupiter_B1(t) + Jupiter_B2(t) + Jupiter_B3(t) + Jupiter_B4(t) + Jupiter_B5(t)) * (180 / Math.PI)
             };
         }
@@ -61,10 +61,10 @@ namespace AstroAlgo.SolarSystem
             double Omega = 100.464441 + 1.0209550 * T + 0.00040117 * T * T + 0.000000569 * T * T * T;
             double pi = 14.331309 + 1.6126668 * T + 0.00103127 * T * T - 0.000004569 * T * T * T;
 
-            L = BasicTools.AngleSimplification(L);
-            i = BasicTools.AngleSimplification(i);
-            Omega = BasicTools.AngleSimplification(Omega);
-            pi = BasicTools.AngleSimplification(pi);
+            L = BasicTools.SimplifyAngle(L);
+            i = BasicTools.SimplifyAngle(i);
+            Omega = BasicTools.SimplifyAngle(Omega);
+            pi = BasicTools.SimplifyAngle(pi);
 
             return new OrbitalElement()
             {

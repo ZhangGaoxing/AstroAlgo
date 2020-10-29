@@ -31,9 +31,9 @@ namespace AstroAlgo.SolarSystem
         /// </summary>
         /// <param name="latitude">Latitude of observation site.</param>
         /// <param name="longitude">Longitude of observation site.</param>
-        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="dateTime">Time of observation site.</param>
         /// <param name="localTimeZone">Time zone of observation site.</param>
-        public Mars(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        public Mars(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, dateTime, localTimeZone)
         {
         }
 
@@ -44,7 +44,7 @@ namespace AstroAlgo.SolarSystem
 
             return new Ecliptic
             {
-                Longitude = BasicTools.AngleSimplification((Mars_L0(t) + Mars_L1(t) + Mars_L2(t) + Mars_L3(t) + Mars_L4(t) + Mars_L5(t)) * (180 / Math.PI)),
+                Longitude = BasicTools.SimplifyAngle((Mars_L0(t) + Mars_L1(t) + Mars_L2(t) + Mars_L3(t) + Mars_L4(t) + Mars_L5(t)) * (180 / Math.PI)),
                 Latitude = (Mars_B0(t) + Mars_B1(t) + Mars_B2(t) + Mars_B3(t) + Mars_B4(t) + Mars_B5(t)) * (180 / Math.PI)
             };
         }
@@ -61,10 +61,10 @@ namespace AstroAlgo.SolarSystem
             double Omega = 49.558093 + 0.7720923 * T + 0.00001605 * T * T + 0.000002325 * T * T * T;
             double pi = 336.060234 + 1.8410331 * T + 0.00013515 * T * T + 0.000000318 * T * T * T;
 
-            L = BasicTools.AngleSimplification(L);
-            i = BasicTools.AngleSimplification(i);
-            Omega = BasicTools.AngleSimplification(Omega);
-            pi = BasicTools.AngleSimplification(pi);
+            L = BasicTools.SimplifyAngle(L);
+            i = BasicTools.SimplifyAngle(i);
+            Omega = BasicTools.SimplifyAngle(Omega);
+            pi = BasicTools.SimplifyAngle(pi);
 
             return new OrbitalElement()
             {

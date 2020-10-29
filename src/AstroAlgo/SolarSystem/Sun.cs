@@ -30,9 +30,9 @@ namespace AstroAlgo.SolarSystem
         /// </summary>
         /// <param name="latitude">Latitude of observation site.</param>
         /// <param name="longitude">Longitude of observation site.</param>
-        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="dateTime">Time of observation site.</param>
         /// <param name="localTimeZone">Time zone of observation site.</param>
-        public Sun(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        public Sun(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, dateTime, localTimeZone)
         {
         }
 
@@ -52,19 +52,19 @@ namespace AstroAlgo.SolarSystem
             double M = 357.52910 + 35999.05030 * T - 0.0001559 * T * T - 0.00000048 * T * T * T;
             double e = 0.016708617 - 0.000042037 * T - 0.0000001236 * T * T;
 
-            L0 = BasicTools.AngleSimplification(L0);
-            M = BasicTools.AngleSimplification(M);
-            e = BasicTools.AngleSimplification(e);
+            L0 = BasicTools.SimplifyAngle(L0);
+            M = BasicTools.SimplifyAngle(M);
+            e = BasicTools.SimplifyAngle(e);
 
             double C = Math.Abs((1.914600 - 0.004817 * T - 0.000014 * T * T)) * Math.Sin(M * (Math.PI / 180.0)) + (0.019993 - 0.000101 * T) * Math.Sin(2 * M * (Math.PI / 180.0)) + 0.000290 * Math.Sin(3 * M * (Math.PI / 180.0));
-            C = BasicTools.AngleSimplification(C);
+            C = BasicTools.SimplifyAngle(C);
 
             double theta = L0 + C;
 
             double theta2000 = theta - 0.01397 * (time.Year - 2000);
 
             double omega = 125.04 - 1934.136 * T;
-            omega = BasicTools.AngleSimplification(omega);
+            omega = BasicTools.SimplifyAngle(omega);
             double lambda = theta - 0.00569 - 0.00478 * Math.Sin(omega * (Math.PI / 180.0));
 
             double sinDelta, delta, alpha;
@@ -109,14 +109,14 @@ namespace AstroAlgo.SolarSystem
             double M = 357.52910 + 35999.05030 * T - 0.0001559 * T * T - 0.00000048 * T * T * T;
             double e = 0.016708617 - 0.000042037 * T - 0.0000001236 * T * T;
 
-            M = BasicTools.AngleSimplification(M);
-            e = BasicTools.AngleSimplification(e);
+            M = BasicTools.SimplifyAngle(M);
+            e = BasicTools.SimplifyAngle(e);
 
             double C = Math.Abs((1.914600 - 0.004817 * T - 0.000014 * T * T)) * Math.Sin(M * (Math.PI / 180.0)) + (0.019993 - 0.000101 * T) * Math.Sin(2 * M * (Math.PI / 180.0)) + 0.000290 * Math.Sin(3 * M * (Math.PI / 180.0));
-            C = BasicTools.AngleSimplification(C);
+            C = BasicTools.SimplifyAngle(C);
 
             double v = M + C;
-            v = BasicTools.AngleSimplification(v);
+            v = BasicTools.SimplifyAngle(v);
 
             double distance = 1.0000011018 * (1 - e * e) / (1 + e * Math.Cos(v * (Math.PI / 180.0)));
 

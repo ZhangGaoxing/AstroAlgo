@@ -31,9 +31,9 @@ namespace AstroAlgo.SolarSystem
         /// </summary>
         /// <param name="latitude">Latitude of observation site.</param>
         /// <param name="longitude">Longitude of observation site.</param>
-        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="dateTime">Time of observation site.</param>
         /// <param name="localTimeZone">Time zone of observation site.</param>
-        public Uranus(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        public Uranus(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, dateTime, localTimeZone)
         {
         }
 
@@ -44,7 +44,7 @@ namespace AstroAlgo.SolarSystem
 
             return new Ecliptic
             {
-                Longitude = BasicTools.AngleSimplification((Uranus_L0(t) + Uranus_L1(t) + Uranus_L2(t) + Uranus_L3(t) + Uranus_L4(t) + Uranus_L5(t)) * (180 / Math.PI)),
+                Longitude = BasicTools.SimplifyAngle((Uranus_L0(t) + Uranus_L1(t) + Uranus_L2(t) + Uranus_L3(t) + Uranus_L4(t) + Uranus_L5(t)) * (180 / Math.PI)),
                 Latitude = (Uranus_B0(t) + Uranus_B1(t) + Uranus_B2(t) + Uranus_B3(t) + Uranus_B4(t) + Uranus_B5(t)) * (180 / Math.PI)
             };
         }
@@ -61,10 +61,10 @@ namespace AstroAlgo.SolarSystem
             double Omega = 74.005947 + 0.5211258 * T + 0.00133982 * T * T + 0.000000433 * T * T * T;
             double pi = 173.005159 + 1.4863784 * T + 0.00021450 * T * T + 0.000000433 * T * T * T;
 
-            L = BasicTools.AngleSimplification(L);
-            i = BasicTools.AngleSimplification(i);
-            Omega = BasicTools.AngleSimplification(Omega);
-            pi = BasicTools.AngleSimplification(pi);
+            L = BasicTools.SimplifyAngle(L);
+            i = BasicTools.SimplifyAngle(i);
+            Omega = BasicTools.SimplifyAngle(Omega);
+            pi = BasicTools.SimplifyAngle(pi);
 
             return new OrbitalElement()
             {

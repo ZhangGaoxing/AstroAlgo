@@ -28,11 +28,11 @@ namespace AstroAlgo.Basic
             // the latitude of ecliptic at the ascending intersection of the ecliptic and the moon's flat orbit.
             double omega = 125.04452 - 1934.136261 * T + 0.0020708 * T * T + T * T * T / 450000.0;
 
-            D = BasicTools.AngleSimplification(D);
-            M = BasicTools.AngleSimplification(M);
-            M1 = BasicTools.AngleSimplification(M1);
-            F = BasicTools.AngleSimplification(F);
-            omega = BasicTools.AngleSimplification(omega);
+            D = BasicTools.SimplifyAngle(D);
+            M = BasicTools.SimplifyAngle(M);
+            M1 = BasicTools.SimplifyAngle(M1);
+            F = BasicTools.SimplifyAngle(F);
+            omega = BasicTools.SimplifyAngle(omega);
 
             D = D * (Math.PI / 180.0);
             M = M * (Math.PI / 180.0);
@@ -284,9 +284,9 @@ namespace AstroAlgo.Basic
         /// <param name="latitude">Local latitude.</param>
         /// <param name="longitude">Local longitude.</param>
         /// <param name="date">Date.</param>
-        /// <param name="localZone">Local zone.</param>
+        /// <param name="localTimeZone">Local time zone.</param>
         /// <returns>Zone time in degree.</returns>
-        public static double[] ElevationAngle2Time(Equator e, double angle, double latitude, double longitude, DateTime date, TimeZoneInfo localZone)
+        public static double[] ElevationAngle2Time(Equator e, double angle, double latitude, double longitude, DateTime date, TimeZoneInfo localTimeZone)
         {
             double ra = e.RA;
             double dec = e.Dec;
@@ -303,10 +303,10 @@ namespace AstroAlgo.Basic
             double t2 = T;
 
             double localSiderealTime1 = t1 + ra;
-            double zoneTime1 = SiderealTime.SiderealTime2ZoneTime(localSiderealTime1, date, localZone, longitude);
+            double zoneTime1 = SiderealTime.SiderealTime2ZoneTime(localSiderealTime1, date, localTimeZone, longitude);
 
             double localSiderealTime2 = t2 + ra;
-            double zoneTime2 = SiderealTime.SiderealTime2ZoneTime(localSiderealTime2, date, localZone, longitude);
+            double zoneTime2 = SiderealTime.SiderealTime2ZoneTime(localSiderealTime2, date, localTimeZone, longitude);
 
             return new double[] { zoneTime1, zoneTime2 };
         }

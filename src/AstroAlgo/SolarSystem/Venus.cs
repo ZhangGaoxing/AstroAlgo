@@ -30,9 +30,9 @@ namespace AstroAlgo.SolarSystem
         /// </summary>
         /// <param name="latitude">Latitude of observation site.</param>
         /// <param name="longitude">Longitude of observation site.</param>
-        /// <param name="localTime">Time of observation site.</param>
+        /// <param name="dateTime">Time of observation site.</param>
         /// <param name="localTimeZone">Time zone of observation site.</param>
-        public Venus(double latitude, double longitude, DateTime localTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, localTime, localTimeZone)
+        public Venus(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, dateTime, localTimeZone)
         {
         }
 
@@ -43,7 +43,7 @@ namespace AstroAlgo.SolarSystem
 
             return new Ecliptic
             {
-                Longitude = BasicTools.AngleSimplification((Venus_L0(t) + Venus_L1(t) + Venus_L2(t) + Venus_L3(t) + Venus_L4(t) + Venus_L5(t)) * (180 / Math.PI)),
+                Longitude = BasicTools.SimplifyAngle((Venus_L0(t) + Venus_L1(t) + Venus_L2(t) + Venus_L3(t) + Venus_L4(t) + Venus_L5(t)) * (180 / Math.PI)),
                 Latitude = (Venus_B0(t) + Venus_B1(t) + Venus_B2(t) + Venus_B3(t) + Venus_B4(t) + Venus_B5(t)) * (180 / Math.PI)
             };
         }
@@ -60,10 +60,10 @@ namespace AstroAlgo.SolarSystem
             double Omega = 76.679920 + 0.9011190 * T + 0.00040664 * T * T - 0.000000080 * T * T * T;
             double pi = 131.563707 + 1.4022188 * T - 0.00107337 * T * T - 0.000005315 * T * T * T;
 
-            L = BasicTools.AngleSimplification(L);
-            i = BasicTools.AngleSimplification(i);
-            Omega = BasicTools.AngleSimplification(Omega);
-            pi = BasicTools.AngleSimplification(pi);
+            L = BasicTools.SimplifyAngle(L);
+            i = BasicTools.SimplifyAngle(i);
+            Omega = BasicTools.SimplifyAngle(Omega);
+            pi = BasicTools.SimplifyAngle(pi);
 
             return new OrbitalElement()
             {

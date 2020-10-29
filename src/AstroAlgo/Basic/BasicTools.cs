@@ -3,19 +3,19 @@
 namespace AstroAlgo.Basic
 {
     /// <summary>
-    /// Basic tools for calculation
+    /// Basic tools for calculation.
     /// </summary>
     public class BasicTools
     {
         /// <summary>
         /// Used to simplify the angle.
         /// </summary>
-        /// <param name="angle">The angle.</param>
+        /// <param name="angle">The angle in degrees.</param>
         /// <returns>The simplified angle.</returns>
         /// <remarks>Because it involves accuracy problems, the modulo operation is not used.</remarks>
-        public static double AngleSimplification(double angle)
+        public static double SimplifyAngle(double angle)
         {
-            double a = angle;
+            decimal a = Convert.ToDecimal(angle);
 
             if (a <= 0)
             {
@@ -32,7 +32,7 @@ namespace AstroAlgo.Basic
                 }
             }
 
-            return a;
+            return Convert.ToDouble(a);
         }
 
         /// <summary>
@@ -42,11 +42,13 @@ namespace AstroAlgo.Basic
         /// <returns>The degrees-minutes-seconds.</returns>
         public static (int degrees, int minutes, double seconds) Angle2DMS(double angle)
         {
-            int degrees = (int)angle;
-            int minutes = (int)((angle - degrees) * 60);
-            double seconds = (((angle - degrees) * 60) - minutes) * 60;
+            decimal a = Convert.ToDecimal(angle);
 
-            return (degrees, minutes, seconds);
+            int degrees = (int)a;
+            int minutes = (int)((a - degrees) * 60);
+            decimal seconds = (((a - degrees) * 60) - minutes) * 60;
+
+            return (degrees, minutes, Convert.ToDouble(seconds));
         }
 
         /// <summary>

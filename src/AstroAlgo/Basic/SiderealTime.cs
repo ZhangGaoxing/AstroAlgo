@@ -19,7 +19,7 @@ namespace AstroAlgo.Basic
             double T = (julianDay - 2451545.0) / 36525.0;
             double theta = 280.46061837 + 360.98564736629 * (julianDay - 2451545.0) + 0.000387933 * T * T - T * T * T / 38710000.0;
 
-            theta = BasicTools.AngleSimplification(theta);
+            theta = BasicTools.SimplifyAngle(theta);
 
             return theta;
         }
@@ -28,16 +28,16 @@ namespace AstroAlgo.Basic
         /// Calculate local mean sidereal time.
         /// </summary>
         /// <param name="localTime">Local time.</param>
-        /// <param name="localZone">Local time zone.</param>
+        /// <param name="localTimeZone">Local time zone.</param>
         /// <param name="longitude">Local longitude.</param>
         /// <returns>Local mean sidereal time in degree.</returns>
-        public static double LocalMeanSiderealTime(DateTime localTime, TimeZoneInfo localZone, double longitude)
+        public static double LocalMeanSiderealTime(DateTime localTime, TimeZoneInfo localTimeZone, double longitude)
         {
             double t0 = UtMeanSiderealTime(new DateTime(localTime.Year, localTime.Month, localTime.Day));
 
-            double t = t0 + ((localTime.Hour + ((localTime.Minute + (localTime.Second / 60.0)) / 60.0)) * 15 - (localZone.BaseUtcOffset.Hours + ((localZone.BaseUtcOffset.Minutes + (localZone.BaseUtcOffset.Seconds / 60.0)) / 60.0)) * 15) * (1 + 1 / 365.2422) + longitude;
+            double t = t0 + ((localTime.Hour + ((localTime.Minute + (localTime.Second / 60.0)) / 60.0)) * 15 - (localTimeZone.BaseUtcOffset.Hours + ((localTimeZone.BaseUtcOffset.Minutes + (localTimeZone.BaseUtcOffset.Seconds / 60.0)) / 60.0)) * 15) * (1 + 1 / 365.2422) + longitude;
 
-            t = BasicTools.AngleSimplification(t);
+            t = BasicTools.SimplifyAngle(t);
 
             return t;
         }
@@ -47,16 +47,16 @@ namespace AstroAlgo.Basic
         /// </summary>
         /// <param name="localSiderealTime">Local mean sidereal in degree.</param>
         /// <param name="date">Local date.</param>
-        /// <param name="localZone">Local time zone.</param>
+        /// <param name="localTimeZone">Local time zone.</param>
         /// <param name="longitude">Local longitude</param>
         /// <returns>Local time in degree.</returns>
-        public static double SiderealTime2ZoneTime(double localSiderealTime, DateTime date, TimeZoneInfo localZone, double longitude)
+        public static double SiderealTime2ZoneTime(double localSiderealTime, DateTime date, TimeZoneInfo localTimeZone, double longitude)
         {
             double t0 = UtMeanSiderealTime(new DateTime(date.Year, date.Month, date.Day));
 
-            double zoneTime = ((localSiderealTime - longitude - t0) / (1.0 + 1.0 / 365.2422)) + (localZone.BaseUtcOffset.Hours + ((localZone.BaseUtcOffset.Minutes + (localZone.BaseUtcOffset.Seconds / 60.0)) / 60.0)) * 15 + 0.06527778;
+            double zoneTime = ((localSiderealTime - longitude - t0) / (1.0 + 1.0 / 365.2422)) + (localTimeZone.BaseUtcOffset.Hours + ((localTimeZone.BaseUtcOffset.Minutes + (localTimeZone.BaseUtcOffset.Seconds / 60.0)) / 60.0)) * 15 + 0.06527778;
 
-            zoneTime = BasicTools.AngleSimplification(zoneTime);
+            zoneTime = BasicTools.SimplifyAngle(zoneTime);
 
             return zoneTime - 1.04166667;
         }
