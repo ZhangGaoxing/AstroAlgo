@@ -26,7 +26,7 @@ double interval = Julian.Date2Interval(time1, time2);
 DateTime time = Julian.Interval2Date(time2, interval: 366);
 ```
 
-## 日期的位置
+## Location of the Date
 
 ```C#
 DateTime date = new DateTime(2019, 10, 1, 10, 1, 0);
