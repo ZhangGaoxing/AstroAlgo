@@ -1,0 +1,139 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+
+    double lat = (double)ViewData["Latitude"];
+    double lon = (double)ViewData["longitude"];
+    DateTime time = (DateTime)ViewData["Time"];
+    string zone = (string)ViewData["Zone"];
+
+    var zones = TimeZoneInfo.GetSystemTimeZones();
+
+    double[] ra = (double[])ViewData["RA"];
+    double[] dec = (double[])ViewData["Dec"];
+    TimeSpan[] rising = (TimeSpan[])ViewData["Rising"];
+    TimeSpan[] culmination = (TimeSpan[])ViewData["Culmination"];
+    TimeSpan[] setting = (TimeSpan[])ViewData["Setting"];
+    double[] toEarth = (double[])ViewData["ToEarth"];
+    double[] toSun = (double[])ViewData["ToSun"];
+    double[] ea = (double[])ViewData["EA"];
+    double[] az = (double[])ViewData["Az"];
+}
+
+<div class="container">
+    <div class="row">
+        <form class="form-inline mb-1" method="get" action="/Home/Index">
+            <div class="form-group m-2">
+                <label class="mr-1" for="latitude">Latitude: </label>
+                <input type="number" min="-90" max="90" step="0.001" class="form-control" id="latitude" name="latitude" placeholder="Latitude" value="@lat">
+            </div>
+            <div class="form-group m-2">
+                <label class="mr-1" for="longitude">Longitude: </label>
+                <input type="number" min="-180" max="180" step="0.001" class="form-control" id="longitude" name="longitude" placeholder="Longitude" value="@lon">
+            </div>
+            <div class="form-group m-2">
+                <label class="mr-1" for="time">Time: </label>
+                <input type="datetime-local" class="form-control" id="time" name="time" value="@time.ToString("yyyy-MM-ddTHH:mm:ss")" />
+            </div>
+            <div class="form-group m-2">
+                <label class="mr-1" for="zone">Time Zone: </label>
+                <select class="form-control" id="zone" name="zone">
+                    @foreach (var item in zones)
+                    {
+                        <option value="@item.Id">@item.DisplayName</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary m-2">Submit</button>
+        </form>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Sun</th>
+                    <th>Mercury</th>
+                    <th>Venus</th>
+                    <th>Mars</th>
+                    <th>Jupiter</th>
+                    <th>Saturn</th>
+                    <th>Uranus</th>
+                    <th>Neptune</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Right ascension</td>
+                    @foreach (var item in ra)
+                    {
+                        (int h, int m, double s) hms = BasicTools.Angle2HMS(item);
+
+                        <td>@hms.h<sup>h</sup>@hms.m<sup>m</sup>@hms.s.ToString("0.0")<sup>s</sup></td>
+                    }
+                </tr>
+                <tr>
+                    <td>Declination</td>
+                    @foreach (var item in dec)
+                    {
+                        (int d, int m, double s) dms = BasicTools.Angle2DMS(item);
+
+                        <td>@dms.d<sup>°</sup>@dms.m<sup>′</sup>@dms.s.ToString("0")<sup>″</sup></td>
+                    }
+                </tr>
+                <tr>
+                    <td>Rising</td>
+                    @foreach (var item in rising)
+                    {
+                        <td>@item</td>
+                    }
+                </tr>
+                <tr>
+                    <td>Culmination</td>
+                    @foreach (var item in culmination)
+                    {
+                        <td>@item</td>
+                    }
+                </tr>
+                <tr>
+                    <td>Setting</td>
+                    @foreach (var item in setting)
+                    {
+                        <td>@item</td>
+                    }
+                </tr>
+                <tr>
+                    <td>To Earth (AU)</td>
+                    @foreach (var item in toEarth)
+                    {
+                        <td>@item.ToString("0.000")</td>
+                    }
+                </tr>
+                <tr>
+                    <td>To Sun (AU)</td>
+                    @foreach (var item in toSun)
+                    {
+                        <td>@item.ToString("0.000")</td>
+                    }
+                </tr>
+                <tr>
+                    <td>Elevation angle</td>
+                    @foreach (var item in ea)
+                    {
+                        <td>@item.ToString("0.0")<sup>°</sup></td>
+                    }
+                </tr>
+                <tr>
+                    <td>Azimuth</td>
+                    @foreach (var item in az)
+                    {
+                        <td>@item.ToString("0.0")<sup>°</sup></td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.getElementById('zone').value = '@Html.Raw(zone)';
+</script>
