@@ -82,7 +82,7 @@ namespace AstroAlgo.SolarSystem
                 var span = TimeSpan.FromHours((time[0] + time[1]) / 30.0);
                 if (time[0] > time[1])
                 {
-                    if (span.Hours > 12)
+                    if (span.Hours >= 12)
                     {
                         return new TimeSpan(span.Hours - 12, span.Minutes, span.Seconds);
                     }
