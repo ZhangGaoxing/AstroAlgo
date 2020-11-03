@@ -37,9 +37,19 @@
             <div class="form-group m-2">
                 <label class="mr-1" for="zone">Time Zone: </label>
                 <select class="form-control" id="zone" name="zone">
-                    @foreach (var item in zones)
+                    @if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
-                        <option value="@item.Id">@item.DisplayName</option>
+                        foreach (var item in zones)
+                        {
+                            <option value="@item.Id">@item.DisplayName</option>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in zones)
+                        {
+                            <option value="@item.Id">@($"({item.StandardName}) {item.Id}")</option>
+                        }
                     }
                 </select>
             </div>

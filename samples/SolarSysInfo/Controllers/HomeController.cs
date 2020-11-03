@@ -19,14 +19,23 @@ namespace SolarSysInfo.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(double latitude = 39.56, double longitude = 116.23, DateTime time = default, string zone = "China Standard Time")
+        public IActionResult Index(double latitude = 39.56, double longitude = 116.23, DateTime time = default, string zone = default)
         {
             if (time == default)
             {
                 time = DateTime.Now;
             }
-            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById(zone);
 
+            TimeZoneInfo timeZone;
+            if (string.IsNullOrEmpty(zone))
+            {
+                timeZone = TimeZoneInfo.Local;
+            }
+            else
+            {
+                timeZone = TimeZoneInfo.FindSystemTimeZoneById(zone);
+            }
+            
             Sun sun = new Sun(latitude, longitude, time, timeZone);
             Mercury mercury = new Mercury(latitude, longitude, time, timeZone);
             Venus venus = new Venus(latitude, longitude, time, timeZone);

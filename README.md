@@ -20,6 +20,12 @@ AstroAlgo is an astronomical algorithms library, written in .NET Core. It is bas
 ## Getting Started
 
 * For more information, please see [documentations](/docs).
+* Run the [samples](/samples) with Docker.
+    ```
+    cd AstroAlgo
+    docker build -t SAMPLE_NAME -f samples/SAMPLE_NAME/Dockerfile .
+    docker run --rm -it -p 8000:80 SAMPLE_NAME
+    ```
 
 ## References
 
