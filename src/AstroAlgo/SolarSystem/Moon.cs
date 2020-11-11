@@ -60,8 +60,11 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
+                double pi = Math.Asin(6378.14 / ToEarth) * 180.0 / Math.PI;
+                double h0 = 0.7275 * pi - 0.5667;
+
                 var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, Latitude, Longitude, DateTime, LocalTimeZone);
+                var time = CoordinateSystem.ElevationAngle2Time(e, h0, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours(time[0] / 15.0);
 
@@ -76,8 +79,11 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
+                double pi = Math.Asin(6378.14 / ToEarth) * 180.0 / Math.PI;
+                double h0 = 0.7275 * pi - 0.5667;
+
                 var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, Latitude, Longitude, DateTime, LocalTimeZone);
+                var time = CoordinateSystem.ElevationAngle2Time(e, h0, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours((time[0] + time[1]) / 30.0);
                 if (time[0] > time[1])
@@ -105,8 +111,11 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
+                double pi = Math.Asin(6378.14 / ToEarth) * 180.0 / Math.PI;
+                double h0 = 0.7275 * pi - 0.5667;
+
                 var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, 0.125, Latitude, Longitude, DateTime, LocalTimeZone);
+                var time = CoordinateSystem.ElevationAngle2Time(e, h0, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours(time[1] / 15.0);
 
