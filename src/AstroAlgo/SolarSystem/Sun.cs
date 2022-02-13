@@ -12,18 +12,14 @@ namespace AstroAlgo.SolarSystem
         /// <summary>
         /// Initializes a new instance of the <see cref="Sun"/>.
         /// </summary>
-        public Sun() : base()
-        {
-        }
+        public Sun() : base() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sun"/>.
         /// </summary>
         /// <param name="latitude">Latitude of observation site.</param>
         /// <param name="longitude">Longitude of observation site.</param>
-        public Sun(double latitude, double longitude) : base(latitude, longitude)
-        {
-        }
+        public Sun(double latitude, double longitude) : base(latitude, longitude) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sun"/>.
@@ -32,9 +28,7 @@ namespace AstroAlgo.SolarSystem
         /// <param name="longitude">Longitude of observation site.</param>
         /// <param name="dateTime">Time of observation site.</param>
         /// <param name="localTimeZone">Time zone of observation site.</param>
-        public Sun(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, dateTime, localTimeZone)
-        {
-        }
+        public Sun(double latitude, double longitude, DateTime dateTime, TimeZoneInfo localTimeZone) : base(latitude, longitude, dateTime, localTimeZone) { }
 
         /// <inheritdoc/>
         public override Ecliptic GetEclipticCoordinate(DateTime time, bool isApparent = false)

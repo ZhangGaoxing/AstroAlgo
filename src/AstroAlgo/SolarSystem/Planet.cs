@@ -24,12 +24,12 @@ namespace AstroAlgo.SolarSystem
         /// <summary>
         /// Time of observation site.
         /// </summary>
-        public virtual DateTime DateTime { get; set; }
+        public virtual DateTime DateTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Time zone of observation site.
         /// </summary>
-        public virtual TimeZoneInfo LocalTimeZone { get; set; }
+        public virtual TimeZoneInfo LocalTimeZone { get; set; } = TimeZoneInfo.Local;
 
         /// <summary>
         /// Apparent equator coordinates at <see cref="DateTime"/>.
@@ -163,13 +163,7 @@ namespace AstroAlgo.SolarSystem
         /// <summary>
         /// Initializes a new instance of the <see cref="Planet"/>.
         /// </summary>
-        public Planet()
-        {
-            Latitude = 0;
-            Longitude = 0;
-            DateTime = DateTime.Now;
-            LocalTimeZone = TimeZoneInfo.Local;
-        }
+        public Planet() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Planet"/>.
@@ -180,8 +174,6 @@ namespace AstroAlgo.SolarSystem
         {
             Latitude = latitude;
             Longitude = longitude;
-            DateTime = DateTime.Now;
-            LocalTimeZone = TimeZoneInfo.Local;
         }
 
         /// <summary>

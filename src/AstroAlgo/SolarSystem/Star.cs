@@ -24,12 +24,12 @@ namespace AstroAlgo.SolarSystem
         /// <summary>
         /// Time of observation site.
         /// </summary>
-        public virtual DateTime DateTime { get; set; }
+        public virtual DateTime DateTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Time zone of observation site.
         /// </summary>
-        public virtual TimeZoneInfo LocalTimeZone { get; set; }
+        public virtual TimeZoneInfo LocalTimeZone { get; set; } = TimeZoneInfo.Local;
 
         /// <summary>
         /// Apparent equator coordinates at <see cref="DateTime"/>.
@@ -38,7 +38,7 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
-                return GetEquatorCoordinate(DateTime.Now, true);
+                return GetEquatorCoordinate(DateTime, true);
             }
         }
 
@@ -49,7 +49,7 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
-                return GetEclipticCoordinate(DateTime.Now, true);
+                return GetEclipticCoordinate(DateTime, true);
             }
         }
 
@@ -60,8 +60,8 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
-                var e = GetEquatorCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, Latitude, Longitude, DateTime.Now, LocalTimeZone);
+                var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
+                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours(time[0] / 15.0);
 
@@ -76,8 +76,8 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
-                var e = GetEquatorCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, Latitude, Longitude, DateTime.Now, LocalTimeZone);
+                var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
+                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours((time[0] + time[1]) / 30.0);
                 if (time[0] > time[1])
@@ -105,8 +105,8 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
-                var e = GetEquatorCoordinate(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0), true);
-                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, Latitude, Longitude, DateTime.Now, LocalTimeZone);
+                var e = GetEquatorCoordinate(new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, 12, 0, 0), true);
+                var time = CoordinateSystem.ElevationAngle2Time(e, -0.833, Latitude, Longitude, DateTime, LocalTimeZone);
 
                 var span = TimeSpan.FromHours(time[1] / 15.0);
 
@@ -121,7 +121,7 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
-                return GetToEarthDistance(DateTime.Now);
+                return GetToEarthDistance(DateTime);
             }
         }
 
@@ -132,7 +132,7 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
-                return CoordinateSystem.GetElevationAngle(DateTime.Now, Equator, Latitude, Longitude);
+                return CoordinateSystem.GetElevationAngle(DateTime, Equator, Latitude, Longitude);
             }
         }
 
@@ -143,7 +143,7 @@ namespace AstroAlgo.SolarSystem
         {
             get
             {
-                return CoordinateSystem.GetAzimuth(DateTime.Now, Equator, Latitude, Longitude);
+                return CoordinateSystem.GetAzimuth(DateTime, Equator, Latitude, Longitude);
             }
         }
 
@@ -152,13 +152,7 @@ namespace AstroAlgo.SolarSystem
         /// <summary>
         /// Initializes a new instance of the <see cref="Star"/>.
         /// </summary>
-        public Star()
-        {
-            Latitude = 0;
-            Longitude = 0;
-            DateTime = DateTime.Now;
-            LocalTimeZone = TimeZoneInfo.Local;
-        }
+        public Star() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Star"/>.
@@ -169,8 +163,6 @@ namespace AstroAlgo.SolarSystem
         {
             Latitude = latitude;
             Longitude = longitude;
-            DateTime = DateTime.Now;
-            LocalTimeZone = TimeZoneInfo.Local;
         }
 
         /// <summary>

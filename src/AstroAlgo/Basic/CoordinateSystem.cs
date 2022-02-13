@@ -237,7 +237,7 @@ namespace AstroAlgo.Basic
 
             double ha = localSiderealTime - ra;
 
-            return ha;
+            return BasicTools.SimplifyAngle(ha);
         }
 
         /// <summary>
