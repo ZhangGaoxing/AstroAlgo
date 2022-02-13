@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Zhang Yuexin</Authors>
     <Product>Astronomical Algorithms</Product>
     <Description>AstroAlgo is an astronomical algorithms library, written in .NET Core. It can be used to calculate astronomical data, like equator and ecliptic coordinate, planet rise and set time, elevation angle and so on. Planets data are based on the planetary theory VSOP87.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
     <PackageTags>Astronomical Astro VSOP Sunrise Sunset Solar Planet</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
     <NeutralLanguage></NeutralLanguage>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
-    <FileVersion>2.1.0.0</FileVersion>
+    <AssemblyVersion>2.2.0.0</AssemblyVersion>
+    <FileVersion>2.2.0.0</FileVersion>
     <Company />
     <PackageProjectUrl>https://github.com/ZhangGaoxing/AstroAlgo</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

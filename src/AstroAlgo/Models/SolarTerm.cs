@@ -75,7 +75,7 @@
         /// <remarks>
         /// Chinese name: 芒种(mángzhòng).
         /// </remarks>
-        GrainInEar = 75,
+        GrainInBeard = 75,
 
         /// <summary>
         /// Sun's ecliptic longitude is 90 degrees.
@@ -131,7 +131,7 @@
         /// <remarks>
         /// Chinese name: 秋分(qiūfēn).
         /// </remarks>
-        AutumnalEquinox = 180,
+        AutumnEquinox = 180,
 
         /// <summary>
         /// Sun's ecliptic longitude is 195 degrees.
@@ -147,8 +147,8 @@
         /// <remarks>
         /// Chinese name: 霜降(shuāngjiàng).
         /// </remarks>
-        FirstFrost = 210,
-
+        FrostsDescent = 210,
+        
         /// <summary>
         /// Sun's ecliptic longitude is 225 degrees.
         /// </summary>

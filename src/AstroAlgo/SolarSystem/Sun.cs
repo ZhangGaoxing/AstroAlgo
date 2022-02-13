@@ -260,7 +260,7 @@ namespace AstroAlgo.SolarSystem
                     lJD = Julian.ToJulianDay(new DateTime(year, 5, 16));
                     rJD = Julian.ToJulianDay(new DateTime(year, 5, 24));
                     break;
-                case SolarTerm.GrainInEar:
+                case SolarTerm.GrainInBeard:
                     lJD = Julian.ToJulianDay(new DateTime(year, 6, 4));
                     rJD = Julian.ToJulianDay(new DateTime(year, 6, 9));
                     break;
@@ -288,7 +288,7 @@ namespace AstroAlgo.SolarSystem
                     lJD = Julian.ToJulianDay(new DateTime(year, 9, 4));
                     rJD = Julian.ToJulianDay(new DateTime(year, 9, 9));
                     break;
-                case SolarTerm.AutumnalEquinox:
+                case SolarTerm.AutumnEquinox:
                     lJD = Julian.ToJulianDay(new DateTime(year, 9, 16));
                     rJD = Julian.ToJulianDay(new DateTime(year, 9, 24));
                     break;
@@ -296,7 +296,7 @@ namespace AstroAlgo.SolarSystem
                     lJD = Julian.ToJulianDay(new DateTime(year, 10, 4));
                     rJD = Julian.ToJulianDay(new DateTime(year, 10, 9));
                     break;
-                case SolarTerm.FirstFrost:
+                case SolarTerm.FrostsDescent:
                     lJD = Julian.ToJulianDay(new DateTime(year, 10, 16));
                     rJD = Julian.ToJulianDay(new DateTime(year, 10, 24));
                     break;
