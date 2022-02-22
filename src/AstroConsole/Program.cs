@@ -9,7 +9,6 @@ namespace AstroConsole
     {
         static void Main(string[] args)
         {
-
         }
     }
 }

@@ -1,30 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;netstandard2.0;</TargetFrameworks>
     <Authors>Zhang Yuexin</Authors>
     <Product>Astronomical Algorithms</Product>
     <Description>AstroAlgo is an astronomical algorithms library, written in .NET Core. It can be used to calculate astronomical data, like equator and ecliptic coordinate, planet rise and set time, elevation angle and so on. Planets data are based on the planetary theory VSOP87.</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Version>2.3.0</Version>
+    <Version>2.3.1</Version>
     <PackageTags>Astronomical Astro VSOP Sunrise Sunset Solar Planet</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
     <NeutralLanguage></NeutralLanguage>
-    <AssemblyVersion>2.3.0.0</AssemblyVersion>
-    <FileVersion>2.3.0.0</FileVersion>
+    <AssemblyVersion>2.3.1.0</AssemblyVersion>
+    <FileVersion>2.3.1.0</FileVersion>
     <Company />
     <PackageProjectUrl>https://github.com/ZhangGaoxing/AstroAlgo</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard1.4\AstroAlgo.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.4\AstroAlgo.xml</DocumentationFile>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   <ItemGroup>
     <None Include="..\..\LICENSE">

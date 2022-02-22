@@ -232,12 +232,11 @@ namespace AstroAlgo.Basic
         /// <returns>The hour angle.</returns>
         public static double GetHourAngle(DateTime time, double RA, double longitude)
         {
-            double ra = RA;
             double localSiderealTime = SiderealTime.LocalMeanSiderealTime(time, TimeZoneInfo.Local, longitude);
 
-            double ha = localSiderealTime - ra;
+            double ha = localSiderealTime - RA;
 
-            return BasicTools.SimplifyAngle(ha);
+            return ha;
         }
 
         /// <summary>
